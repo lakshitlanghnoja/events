@@ -1,0 +1,31 @@
+@media(max-width:991px){
+	.btn-outer a{padding: 15px 10px;}
+}
+@media(max-width:767px){
+	.search-panel{position: static; background-color: #ddd; padding: 30px 10px;}
+	.search-panel .form-group{margin-bottom: 15px;}
+	.form-control{font-size: 14px; line-height: 18px; height: 40px; padding: 6px 12px;}
+	.dk-selected{font-size: 14px; height: 40px; line-height: 40px; padding: 0 35px 0 12px}
+	.dk-option{font-size: 14px; line-height: 18px; padding: 8px 12px;}
+	.btn-secondary{font-size: 14px; line-height: 16px; padding: 12px 20px;}
+
+	header{padding: 0;}
+	.navigation li{font-size: 14px; line-height: 18px;}
+
+	.small-header header{padding: 0px 0 10px;}
+	h1{font-size: 28px; line-height: 32px;}
+	.main-content{padding: 25px 0;}
+	p{font-size: 14px; line-height: 22px;}
+
+	.thumbnail-outer{padding: 20px 0 30px;}
+	h2{font-size: 26px; line-height: 30px;}
+
+	footer{padding: 30px 0 30px;}
+	footer h4{text-align: left !important;}
+	.social-icons{float: left !important}
+	.footer-navigation{margin-bottom: 20px;}
+	footer p,footer p.pull-right{text-align: left !important; float: left !important}
+
+	.modal-dialog{width: auto;}
+	.form-link{font-size: 12px; line-height: 16px; display: inline-block; margin-left: 10px;}
+}
