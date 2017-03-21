@@ -35,6 +35,9 @@
             <div class="modal-body">
                 <h3>Login</h3>
                 <form action="" method="post">
+                    <div id="login_message">
+
+                    </div>
                     <div class="form-group">
                         <input type="email" id="login_email" class="form-control" placeholder="Email Address">
                     </div>
@@ -43,7 +46,7 @@
                     </div>
                     <div class="form-group">
                         <button type="submit" id="login_btn" class="btn-secondary">Submit</button>
-                        <a href="#" title="Forgot your password" class="form-link">Forgot your password?</a>
+                        <a href="<?php echo base_url();?>/users/forgot_password" title="Forgot your password" class="form-link">Forgot your password?</a>
                     </div>
                 </form>  
             </div>
@@ -60,6 +63,7 @@
             <div class="modal-body">
                 <h3>Register</h3>
                 <form>
+
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="First Name">
                     </div>
@@ -81,29 +85,74 @@
     </div>
 </div>
 <script>
-    $('#login_btn').click(function (e) {
-        e.preventDefault();
-        var email = $('#login_email').val();
-        var password = $('#login_password').val();
-        $.ajax({
-            type: 'POST',
-            url: '<?php echo base_url() . $this->_data['section_name']; ?>/users/index',
-            data: {<?php echo $this->_ci->security->get_csrf_token_name(); ?>: '<?php echo $this->_ci->security->get_csrf_hash(); ?>', email: email, password: password},
-            success: function (data) {
-//                    alert(data); return;
+    $(document).ready(function () {
+        $('#login_btn').click(function (e) {
+            e.preventDefault();
+            var email = $('#login_email').val();
+            var password = $('#login_password').val();
 
-                //for managing same state while record delete
-                if ($('.rows') && $('.rows').length > 1) {
-                    pageno = "&page_number=<?php echo $page_number; ?>";
-                } else {
-                    pageno = "&page_number=<?php echo $page_number - 1; ?>";
-                }
-                ajaxLink('<?php echo base_url() . $this->_data['section_name']; ?>/users/index', 'ajax_table', '<?php echo $querystr; ?>' + pageno);
-                $("#messages").show();
-                $("#messages").html(data);
+            if (email == '') {
+                $('#login_message').text('Please enter valid email address');
+                $('#login_message').css('background-color', 'red');
+                $('#login_message').css('padding', '5px');
+                $('#login_message').css('border-radius', '5px');
+                $('#login_message').css('margin-bottom', '10px');
+                $('#login_message').css('color', '#fff');
+                return false;
             }
+            if (password == '') {
+                $('#login_message').text('Please enter password');
+                $('#login_message').css('background-color', 'red');
+                $('#login_message').css('padding', '5px');
+                $('#login_message').css('border-radius', '5px');
+                $('#login_message').css('margin-bottom', '10px');
+                $('#login_message').css('color', '#fff');
+                return false;
+            }
+            
+            $('#login_message').text();
+            $('#login_message').css('background-color', '#FFFFFF');
+            
+            var URL = '<?php echo base_url(); ?>users/ajax_login';
+            //alert(<?php echo $this->_ci->security->get_csrf_token_name(); ?>);
+            $.ajax({
+                type: 'POST',
+                url: URL,
+                data: {'<?php echo $this->_ci->security->get_csrf_token_name(); ?>': '<?php echo $this->_ci->security->get_csrf_hash(); ?>', email: email, password: password},
+                success: function (data) {
+                    data = jQuery.parseJSON(data);
+                    console.log(data);
+                    console.log(data.status);
+                    console.log(data.msg);
+                    if (data.status == 1) {
+                        window.location.replace("<?php echo base_url(); ?>");
+                    } else {
+                        $('#login_message').text(data.msg);
+                        $('#login_message').css('background-color', 'red');
+                        $('#login_message').css('padding', '5px');
+                        $('#login_message').css('border-radius', '5px');
+                        $('#login_message').css('margin-bottom', '10px');
+                        $('#login_message').css('color', '#fff');
+                        return false;
+                    }
+                }
+            });
         });
     });
+    /*$('#login_btn').click(function (e) {
+     e.preventDefault();
+     alert('hello');
+     var email = $('#login_email').val();
+     var password = $('#login_password').val();
+     $.ajax({
+     type: 'POST',
+     url: '<?php echo base_url() . $this->_data['section_name']; ?>/users/ajax_login',
+     data: {<?php echo $this->_ci->security->get_csrf_token_name(); ?>: '<?php echo $this->_ci->security->get_csrf_hash(); ?>', email: email, password: password},
+     success: function (data) {
+     
+     }
+     });
+     });*/
 </script>
 </body>
 </html>

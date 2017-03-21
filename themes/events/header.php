@@ -24,8 +24,11 @@
                         <div class="col-sm-3">
                             <!-- <a href="#" title="Logo" class="logo">Logo</a> -->
                         </div>
-                        <div class="col-sm-5 pull-right">
+                        <div class="col-sm-5 pull-right">                            
                             <nav class="navigation">
+                                <?php                                
+                                //widget('front_menu', array('menu_name' => 'front_menu', 'section_name' => $ci->theme->get('section_name')));
+                                ?>
                                 <ul class="clearfix">
                                     <li>
                                         <a href="#" title="Login"  data-toggle="modal" data-target="#loginModal">Login</a>

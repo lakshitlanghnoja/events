@@ -15,10 +15,10 @@ class Users extends Base_Front_Controller {
     function __construct() {
         parent::__construct();
         //load helpers
+        $this->theme->set_theme("events"); 
         $this->load->helper(array('url', 'cookie', 'captcha'));
         $this->load->library('form_validation');
         $this->access_control($this->access_rules());
-
     }
 
     /**
@@ -27,7 +27,7 @@ class Users extends Base_Front_Controller {
     private function access_rules() {
         return array(
             array(
-                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'regenerate_activation_link', 'logout', 'profile'),
+                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'regenerate_activation_link', 'logout', 'profile', 'ajax_login'),
                 'users' => array('*'),
             ),
             array(
@@ -44,18 +44,59 @@ class Users extends Base_Front_Controller {
     function index() {
         $this->login();
     }
-    
+
     /*
      *  Function login for check front header popup login
      */
-    function ajax_login(){
+
+    function ajax_login() {
         if (isset($this->session->userdata[$this->section_name]['user_id'])) {
             redirect("/");
         }
-        
-        $data = $this->input->post();
-        
+
+        $postData = $this->input->post();
+        if (!empty($postData)) {
+            $email = trim(strip_tags($postData['email']));
+            $password = trim(strip_tags($postData['password']));
+
+            $this->form_validation->set_rules('email', lang('email'), 'trim|required|valid_email|xss_clean');
+            $this->form_validation->set_rules('password', lang('password'), 'trim|required|xss_clean');
+            if ($this->form_validation->run() == TRUE) {
+                $result = $this->users_model->check_front_login($email, $password);
+                if (!empty($result)) {
+                    if ($result[0]['u']['status'] == 1) {
+                        $data['user_id'] = $result[0]['u']['id'];
+                        $data['role_id'] = $result[0]['u']['role_id'];
+                        $data['email'] = $result[0]['u']['email'];
+                        $data['firstname'] = $result[0]['u']['firstname'];
+                        $data['lastname'] = $result[0]['u']['lastname'];
+                        $data['logged_in'] = TRUE;
+
+                        $this->allowed_permission_list($data['role_id']);
+
+                        $this->session->set_custom_userdata($this->section_name, $data);
+                        $data['status'] = 1;
+                        $data['msg'] = 'Login Success';
+                    } else {
+                        $data['status'] = 0;
+                        $data['msg'] = 'Please enter valid data';
+                    }
+                } else {
+                    $data['status'] = 0;
+                    $data['msg'] = 'Please enter valid data';
+                }
+            } else {
+                $data['status'] = 0;
+                $data['msg'] = 'Please enter valid data';
+            }
+        } else {
+            $data['status'] = 0;
+            $data['msg'] = 'Invalid request';
+        }
+        echo json_encode($data);
+        exit;
     }
+
     /*
      *  Function login for check front login
      */
@@ -171,14 +212,11 @@ class Users extends Base_Front_Controller {
             if ($this->form_validation->run($this) == TRUE) {
                 $this->users_model->save_user($data_array);
                 //$flag = $this->send_email($data_array, 'registration_template');
-				if($flag)
-				{
-					$this->theme->set_message(lang('registration-success-msg'), 'success');
-				}
-				else
-				{
-					$this->theme->set_message(lang('email-template-inactive'), 'info');
-				}
+                if ($flag) {
+                    $this->theme->set_message(lang('registration-success-msg'), 'success');
+                } else {
+                    $this->theme->set_message(lang('email-template-inactive'), 'info');
+                }
                 redirect(base_url() . "users");
             } else {
                 $captcha = $this->my_captcha->deleteImage()->createWord()->createCaptcha();
@@ -216,8 +254,7 @@ class Users extends Base_Front_Controller {
 
             $result = $this->users_model->get_user_detail($id);
 
-            if(!empty($result) && $result['status'] == 1)
-            {
+            if (!empty($result) && $result['status'] == 1) {
                 //Variable Assignment
                 $firstname = $result['firstname'];
                 $lastname = $result['lastname'];
@@ -231,12 +268,10 @@ class Users extends Base_Front_Controller {
 
 
                 //If form submit
-                if ($this->input->post('mysubmit'))
-                {
+                if ($this->input->post('mysubmit')) {
                     $post = $this->input->post();
 
                     //$default_role = $this->users_model->get_default_role();
-
                     //Variable Assignment
                     //$id = intval($post['id']);
                     $id = $this->session->userdata[$this->section_name]['user_id'];
@@ -258,15 +293,12 @@ class Users extends Base_Front_Controller {
 
                     // field name, error message, validation rules
                     $this->profile_validation_rules();
-                    if ($this->form_validation->run($this) == TRUE)
-                    {
+                    if ($this->form_validation->run($this) == TRUE) {
                         //echo "IN"; exit;
                         $this->users_model->save_profile($data_array);
                         $this->theme->set_message(lang('edit-profile-success'), 'success');
                         redirect(base_url() . "users/profile");
-                    }
-                    else
-                    {
+                    } else {
                         $captcha = $this->my_captcha->deleteImage()->createWord()->createCaptcha();
                     }
                 }
@@ -284,18 +316,14 @@ class Users extends Base_Front_Controller {
                 //echo $captcha; exit;
                 //Render view
                 $this->theme->view($data);
-            }
-            else
-            {
+            } else {
                 $this->session->unset_userdata($this->section_name);
                 $this->theme->set_message(lang('inactive-account-msg'), "error");
-                redirect(site_url().'users/login');
+                redirect(site_url() . 'users/login');
             }
-        }
-        else
-        {
+        } else {
             $this->theme->set_message(lang('do-login-msg-edit-profile'), 'info');
-            redirect(site_url().'users/login');
+            redirect(site_url() . 'users/login');
         }
     }
 
@@ -309,42 +337,36 @@ class Users extends Base_Front_Controller {
         $this->mailer->mail->SetFrom("mehul.panchal@tatvasoft.com", SITE_NAME);
         $this->mailer->mail->IsHTML(true);
 
-        $firstname = isset($data['firstname'])?$data['firstname']:'';
-        $lastname = isset($data['lastname'])?$data['lastname']:'';
-        $password = isset($data['password'])?$data['password']:'';
+        $firstname = isset($data['firstname']) ? $data['firstname'] : '';
+        $lastname = isset($data['lastname']) ? $data['lastname'] : '';
+        $password = isset($data['password']) ? $data['password'] : '';
 
         $mail_vars = array(
-                  'USERNAME' => $data['email'],
-                  'name' => $firstname. ' ' .$lastname,
-                  'activation_link' => base_url() . 'users/activation/' . $activation_code,
-                  'SITE_NAME' => SITE_NAME,
-                  'YEAR' => date('Y'),
-                  'logopath' => site_base_url() . 'themes/default/images/logo.jpg',
-                  'PASSWORD' => $password
-              );
+            'USERNAME' => $data['email'],
+            'name' => $firstname . ' ' . $lastname,
+            'activation_link' => base_url() . 'users/activation/' . $activation_code,
+            'SITE_NAME' => SITE_NAME,
+            'YEAR' => date('Y'),
+            'logopath' => site_base_url() . 'themes/default/images/logo.jpg',
+            'PASSWORD' => $password
+        );
 
         $body = get_template_body($this, $template, $mail_vars, $this->session->userdata[$this->section_name]['site_lang_id']);
         $subject = get_template_subject($this, $template);
 
-		if(trim($body)=="")
-		{
-			 return false;
-		}
-		else
-		{
-			try
-            {
-				$this->mailer->sendmail(
-						$data['email'], $data['firstname'] . " " . $data['lastname'], $subject, $body
-				);
-			}
-            catch (phpmailerException $e)
-            {
-				echo $e->errorMessage();
-				exit;
-			}
-			return true;
-		}
+        if (trim($body) == "") {
+            return false;
+        } else {
+            try {
+                $this->mailer->sendmail(
+                        $data['email'], $data['firstname'] . " " . $data['lastname'], $subject, $body
+                );
+            } catch (phpmailerException $e) {
+                echo $e->errorMessage();
+                exit;
+            }
+            return true;
+        }
     }
 
     /*
@@ -371,7 +393,6 @@ class Users extends Base_Front_Controller {
     function profile_validation_rules() {
         //Type casting
         //$id = intval($this->input->post('id'));
-
         //$id = $this->session->userdata[$this->section_name]['user_id'];
 
         $id = intval($this->input->post('id'));
@@ -384,7 +405,7 @@ class Users extends Base_Front_Controller {
 
         $this->form_validation->set_rules('email', lang('email'), 'trim|required|valid_email|callback_check_unique_email|xss_clean');
         //if (CAPTCHA_SETTING)
-           // $this->form_validation->set_rules('captcha', 'Captcha', 'required|xss_clean|validate_captcha[' . $this->input->post("captcha") . ']');
+        // $this->form_validation->set_rules('captcha', 'Captcha', 'required|xss_clean|validate_captcha[' . $this->input->post("captcha") . ']');
     }
 
     /*
@@ -407,7 +428,7 @@ class Users extends Base_Front_Controller {
         }
         //Success message
 
-        redirect(site_url().'users');
+        redirect(site_url() . 'users');
         exit;
     }
 
@@ -415,15 +436,13 @@ class Users extends Base_Front_Controller {
      *  Function for change password
      */
 
-    function change_password()
-    {
+    function change_password() {
         //Type casting
         $user_id = intval($this->session->userdata[$this->section_name]['user_id']);
 
         $result = $this->users_model->get_user_detail($user_id);
 
-        if(!empty($result) && $result['status'] == 1)
-        {
+        if (!empty($result) && $result['status'] == 1) {
             //Initializing
             $data = array();
             $current_password = "";
@@ -431,10 +450,8 @@ class Users extends Base_Front_Controller {
             $this->theme->set('current_password', $current_password);
 
             //Logic
-            if (isset($user_id) && $user_id != "" && $user_id != 0)
-            {
-                if ($this->input->post('Submit'))
-                {
+            if (isset($user_id) && $user_id != "" && $user_id != 0) {
+                if ($this->input->post('Submit')) {
                     //Variable assignment
                     $password = trim(strip_tags($this->input->post('password')));
                     $current_password = $this->input->post('current_password');
@@ -444,27 +461,21 @@ class Users extends Base_Front_Controller {
                     $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[4]|max_length[40]|xss_clean');
                     $this->form_validation->set_rules('passconf', 'Confirm Password', 'trim|required|matches[password]|xss_clean');
 
-                    if ($this->form_validation->run() == TRUE)
-                    {
+                    if ($this->form_validation->run() == TRUE) {
                         $user_data = $this->users_model->get_user_detail($user_id);
                         $current_password = encriptsha1($this->input->post('current_password'));
 
-                        if ($current_password == $user_data['password'])
-                        {
+                        if ($current_password == $user_data['password']) {
                             $this->users_model->changepassword($user_id, $password);
                             $this->theme->set_message(lang('change-password-success'), 'success');
                             redirect(site_url() . 'users/change_password');
-                        }
-                        else
-                        {
+                        } else {
                             $this->theme->set_message(lang('does-not-match-currentpassword'), 'error');
                             redirect(site_url() . 'users/change_password');
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $this->theme->set_message(lang('do-login-msg-change-password'), 'info');
                 redirect(site_url() . 'admin/users/login');
             }
@@ -474,12 +485,10 @@ class Users extends Base_Front_Controller {
 
             //Render view
             $this->theme->view($data);
-        }
-        else
-        {
-              $this->session->unset_userdata($this->section_name);
-              $this->theme->set_message(lang('inactive-account-msg'), "error");
-              redirect(site_url().'users/login');
+        } else {
+            $this->session->unset_userdata($this->section_name);
+            $this->theme->set_message(lang('inactive-account-msg'), "error");
+            redirect(site_url() . 'users/login');
         }
     }
 
@@ -576,7 +585,7 @@ class Users extends Base_Front_Controller {
         $this->send_email($userdata, 'registration_template');
         $this->theme->set_message(lang('account-activation-msg'), 'success');
 
-        redirect(site_url().'users/login');
+        redirect(site_url() . 'users/login');
         exit;
     }
 
