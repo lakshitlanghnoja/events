@@ -11,7 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet"></link>
         <?php
         echo add_css(array('jquery-ui.min', 'dropkick', 'font-awesome', 'style', 'media')); // adds few more csss
-        echo add_js(array('jquery.min', 'bootstrap.min', 'jquery-imagefill', 'imagesloaded.pkgd.min', 'jquery-ui.min', 'dropkick', 'general')); // adds js files
+        echo add_js(array('jquery.min', 'bootstrap.min', 'jquery-imagefill', 'imagesloaded.pkgd.min', 'jquery-ui.min', 'dropkick', 'general','dev_general')); // adds js files
         ?>
 
     </head>
@@ -26,17 +26,25 @@
                         </div>
                         <div class="col-sm-5 pull-right">                            
                             <nav class="navigation">
-                                <?php                                
+                                <?php
+                                if (isset($this->_ci->session->userdata['front']['logged_in']) && $this->_ci->session->userdata['front']['logged_in'] == 1) {
+                                    widget('front_menu', array('menu_name' => 'front_menu', 'section_name' => $ci->theme->get('section_name')));
+                                } else {
+                                    ?>
+                                    <ul class="clearfix">
+                                        <li>
+                                            <a href="#" title="Login"  data-toggle="modal" data-target="#loginModal">Login</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" title="Register" data-toggle="modal" data-target="#registerModal">Register</a>
+                                        </li>
+                                    </ul>
+                                    <?php
+                                }
+
                                 //widget('front_menu', array('menu_name' => 'front_menu', 'section_name' => $ci->theme->get('section_name')));
                                 ?>
-                                <ul class="clearfix">
-                                    <li>
-                                        <a href="#" title="Login"  data-toggle="modal" data-target="#loginModal">Login</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" title="Register" data-toggle="modal" data-target="#registerModal">Register</a>
-                                    </li>
-                                </ul>
+
                             </nav>
                         </div>
                     </div>

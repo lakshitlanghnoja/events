@@ -45,8 +45,31 @@
                         <input type="password" id="login_password" class="form-control" placeholder="Password">
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="login_btn" class="btn-secondary">Submit</button>
-                        <a href="<?php echo base_url();?>/users/forgot_password" title="Forgot your password" class="form-link">Forgot your password?</a>
+                        <button type="submit" id="login_btn" class="btn-secondary">Submit</button>                                              
+                        <a href="#" title="Login" id="forgotPasswordLink"  data-toggle="modal" data-target="#forgotPasswordModal">Forgot your password?</a>
+                    </div>
+                </form>  
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <a href="#" title="Close" data-dismiss="modal" class="modal-close"><i class="fa fa-close"></i></a>
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3>Forgot your password?</h3>
+                <form action="" method="post">
+                    <div id="forgotPassword_message">
+
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="forgetPassword_email" class="form-control" placeholder="Email Address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" id="forgotPassword_btn" class="btn-secondary">Submit</button>                        
                     </div>
                 </form>  
             </div>
@@ -62,97 +85,36 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h3>Register</h3>
-                <form>
+                <form action="" id="registrationForm" method="post">
 
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="First Name">
+                        <input type="text" id="register_first_name" name="firstName" class="form-control" placeholder="First Name">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Last Name">
+                        <input type="text" id="register_last_name" name="lastName" class="form-control" placeholder="Last Name">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Mobile Number">
+                        <input type="email" id="register_email" name="email" class="form-control" placeholder="Email Address">
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Email Address">
+                        <input type="password" id="register_password" name="password" class="form-control" placeholder="Password">
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn-secondary">Submit</button>
+                        <input type="text" id="register_dob" name="dob" class="form-control datepicker" placeholder="Date of Birth">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="register_mobile" name="mobileNumber" class="form-control" placeholder="Mobile Number">
+                    </div>            
+                    <div class="form-group">
+                        <button type="button" id="register_submit" class="btn-secondary">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-        $('#login_btn').click(function (e) {
-            e.preventDefault();
-            var email = $('#login_email').val();
-            var password = $('#login_password').val();
-
-            if (email == '') {
-                $('#login_message').text('Please enter valid email address');
-                $('#login_message').css('background-color', 'red');
-                $('#login_message').css('padding', '5px');
-                $('#login_message').css('border-radius', '5px');
-                $('#login_message').css('margin-bottom', '10px');
-                $('#login_message').css('color', '#fff');
-                return false;
-            }
-            if (password == '') {
-                $('#login_message').text('Please enter password');
-                $('#login_message').css('background-color', 'red');
-                $('#login_message').css('padding', '5px');
-                $('#login_message').css('border-radius', '5px');
-                $('#login_message').css('margin-bottom', '10px');
-                $('#login_message').css('color', '#fff');
-                return false;
-            }
-            
-            $('#login_message').text();
-            $('#login_message').css('background-color', '#FFFFFF');
-            
-            var URL = '<?php echo base_url(); ?>users/ajax_login';
-            //alert(<?php echo $this->_ci->security->get_csrf_token_name(); ?>);
-            $.ajax({
-                type: 'POST',
-                url: URL,
-                data: {'<?php echo $this->_ci->security->get_csrf_token_name(); ?>': '<?php echo $this->_ci->security->get_csrf_hash(); ?>', email: email, password: password},
-                success: function (data) {
-                    data = jQuery.parseJSON(data);
-                    console.log(data);
-                    console.log(data.status);
-                    console.log(data.msg);
-                    if (data.status == 1) {
-                        window.location.replace("<?php echo base_url(); ?>");
-                    } else {
-                        $('#login_message').text(data.msg);
-                        $('#login_message').css('background-color', 'red');
-                        $('#login_message').css('padding', '5px');
-                        $('#login_message').css('border-radius', '5px');
-                        $('#login_message').css('margin-bottom', '10px');
-                        $('#login_message').css('color', '#fff');
-                        return false;
-                    }
-                }
-            });
-        });
-    });
-    /*$('#login_btn').click(function (e) {
-     e.preventDefault();
-     alert('hello');
-     var email = $('#login_email').val();
-     var password = $('#login_password').val();
-     $.ajax({
-     type: 'POST',
-     url: '<?php echo base_url() . $this->_data['section_name']; ?>/users/ajax_login',
-     data: {<?php echo $this->_ci->security->get_csrf_token_name(); ?>: '<?php echo $this->_ci->security->get_csrf_hash(); ?>', email: email, password: password},
-     success: function (data) {
-     
-     }
-     });
-     });*/
-</script>
+<?php
+echo add_js(array('jquery.validate.min'));
+?>
 </body>
 </html>

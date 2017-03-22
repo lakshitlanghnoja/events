@@ -15,7 +15,7 @@ class Users extends Base_Front_Controller {
     function __construct() {
         parent::__construct();
         //load helpers
-        $this->theme->set_theme("events"); 
+        $this->theme->set_theme("events");
         $this->load->helper(array('url', 'cookie', 'captcha'));
         $this->load->library('form_validation');
         $this->access_control($this->access_rules());
@@ -27,7 +27,7 @@ class Users extends Base_Front_Controller {
     private function access_rules() {
         return array(
             array(
-                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'regenerate_activation_link', 'logout', 'profile', 'ajax_login'),
+                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'ajax_forgotPassword', 'regenerate_activation_link', 'logout', 'profile', 'ajax_login'),
                 'users' => array('*'),
             ),
             array(
@@ -334,13 +334,14 @@ class Users extends Base_Front_Controller {
     public function send_email($data = array(), $template = NULL) {
 
         $this->load->library('mailer');
-        $this->mailer->mail->SetFrom("mehul.panchal@tatvasoft.com", SITE_NAME);
+        $this->mailer->mail->SetFrom("noreply@events.com", SITE_NAME);
         $this->mailer->mail->IsHTML(true);
 
         $firstname = isset($data['firstname']) ? $data['firstname'] : '';
         $lastname = isset($data['lastname']) ? $data['lastname'] : '';
         $password = isset($data['password']) ? $data['password'] : '';
-
+        
+        $activation_code = '';
         $mail_vars = array(
             'USERNAME' => $data['email'],
             'name' => $firstname . ' ' . $lastname,
@@ -359,7 +360,7 @@ class Users extends Base_Front_Controller {
         } else {
             try {
                 $this->mailer->sendmail(
-                        $data['email'], $data['firstname'] . " " . $data['lastname'], $subject, $body
+                        $data['email'], $firstname . " " . $lastname, $subject, $body
                 );
             } catch (phpmailerException $e) {
                 echo $e->errorMessage();
@@ -490,6 +491,55 @@ class Users extends Base_Front_Controller {
             $this->theme->set_message(lang('inactive-account-msg'), "error");
             redirect(site_url() . 'users/login');
         }
+    }
+
+    /*
+     * Function for AJAX based Forgot PAssword
+     */
+
+    function ajax_forgotPassword() {
+        $data = array();
+        $postData = $this->input->post();
+        if (!empty($postData)) {
+            $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+            if ($this->form_validation->run() == TRUE) {
+                $data['email'] = trim(strip_tags($this->input->post("email")));
+                $this->users_model->email_id = $data['email'];
+
+                $result = $this->users_model->get_user_detail_by_email($data['email']);
+                if (!empty($result)) {
+                    if ($result[0]['u']['status'] == '1') {
+                        $random_string = get_random_string();
+                        $data['password'] = encriptsha1($random_string);
+
+                        // send email for regerate password
+                        $this->users_model->forgot_password($data);
+
+                        $forgot_array['email'] = $data['email'];
+                        $forgot_array['password'] = $random_string;
+                        $this->send_email($forgot_array, 'forgot_password_email_template');
+                        
+                        $return['status'] = 1;
+                        $return['msg'] = "We have sent login details on your email address. Please check your email.";
+                    } else {
+                        $return['status'] = 0;
+                        $return['msg'] = "No matching email address found. Please create account.";
+                    }
+                } else {
+                    $return['status'] = 0;
+                    $return['msg'] = "No matching email address found. Please create account.";
+                }
+            } else {
+                $return['status'] = 0;
+                $return['msg'] = "Please enter valid email address.";
+            }
+        } else {
+            $return['status'] = 0;
+            $return['msg'] = "Please enter valid email address.";
+        }
+        
+        echo json_encode($return);
+        exit;
     }
 
     /*

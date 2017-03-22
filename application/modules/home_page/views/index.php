@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <input type="text" id="datepicker" class="form-control" placeholder="Date">
+                        <input type="text" id="datepicker" class="form-control datepicker" placeholder="Date">
                     </div>
                 </div>
                 <div class="col-sm-3">
