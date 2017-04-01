@@ -32,6 +32,7 @@ class Cms_model extends Base_Model
      */
     public function get_cms_detail_by_slug($slug_url)
     {
+        
         $slug_url = trim(strip_tags($slug_url));
         $this->db->select("c.*, cm.*");
         $this->db->from($this->_table." as c");
@@ -40,9 +41,24 @@ class Cms_model extends Base_Model
         $this->db->where('c.status', 1);        
         $this->db->where('c.lang_id', $this->{'cms_model'}->language_id);        
         $query = $this->db->get();   
+       
+        if ($query->num_rows() != 0)
+        {
+            return $this->db->custom_result($query);            
+        }
+    }
+    
+    public function get_cms_content_by_slug($slug_url){
+        $slug_url = trim(strip_tags($slug_url));
+        $this->db->select("c.*");
+        $this->db->from($this->_table." as c");
+        $this->db->where('c.slug_url', $slug_url);
+        $this->db->where('c.status', 1);
+        $query = $this->db->get();   
         
         if ($query->num_rows() != 0)
         {
+            return $userArray = $query->row_array();
             return $this->db->custom_result($query);            
         }
     }

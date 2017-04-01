@@ -3,15 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/L:/projects/wamp/www/events/application/core/functions.php</file>
-            <file>file:/L:/projects/wamp/www/events/themes/events/css/reset.css</file>
-            <file>file:/L:/projects/wamp/www/events/application/helpers/customcomman_helper.php</file>
-            <file>file:/L:/projects/wamp/www/events/application/modules/users/controllers/users_admin.php</file>
-            <file>file:/L:/projects/wamp/www/events/application/modules/users/views/admin_index.php</file>
-            <file>file:/L:/projects/wamp/www/events/application/config/routes.php</file>
-            <file>file:/L:/projects/wamp/www/events/application/modules/home_page/views/index.php</file>
+            <file>file:/L:/projects/wamp/www/events/application/modules/users/controllers/users.php</file>
+            <file>file:/L:/projects/wamp/www/events/application/modules/event/models/event_model.php</file>
+            <file>file:/L:/projects/wamp/www/events/application/modules/users/views/create_event.php</file>
+            <file>file:/L:/projects/wamp/www/events/themes/events/js/general.js</file>
+            <file>file:/L:/projects/wamp/www/events/application/modules/users/views/profile.php</file>
             <file>file:/L:/projects/wamp/www/events/themes/events/header.php</file>
-            <file>file:/L:/projects/wamp/www/events/themes/events/css/font-awesome.css</file>
+            <file>file:/L:/projects/wamp/www/events/application/modules/home_page/views/index.php</file>
+            <file>file:/L:/projects/wamp/www/events/application/modules/event/views/index.php</file>
         </group>
     </open-files>
 </project-private>

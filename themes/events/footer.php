@@ -85,25 +85,27 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h3>Register</h3>
-                <form action="" id="registrationForm" method="post">
-
+                <div id="register_fom_message"></div>
+                <form action="" id="registrationForm" method="post" autocomplete="off">
+                    <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">
+                    <input type="hidden" name="id" value="0">
                     <div class="form-group">
-                        <input type="text" id="register_first_name" name="firstName" class="form-control" placeholder="First Name">
+                        <input type="text" id="register_first_name" name="register_first_name" class="form-control" placeholder="First Name">
                     </div>
                     <div class="form-group">
-                        <input type="text" id="register_last_name" name="lastName" class="form-control" placeholder="Last Name">
+                        <input type="text" id="register_last_name" name="register_last_name" class="form-control" placeholder="Last Name">
                     </div>
                     <div class="form-group">
-                        <input type="email" id="register_email" name="email" class="form-control" placeholder="Email Address">
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <input type="password" id="register_password" name="password" class="form-control" placeholder="Password">
+                        <input type="password" id="register_password" name="register_password" class="form-control" placeholder="Password">
                     </div>
                     <div class="form-group">
-                        <input type="text" id="register_dob" name="dob" class="form-control datepicker" placeholder="Date of Birth">
+                        <input type="text" id="register_dob" name="register_dob" class="form-control" placeholder="Date of Birth">
                     </div>
                     <div class="form-group">
-                        <input type="text" id="register_mobile" name="mobileNumber" class="form-control" placeholder="Mobile Number">
+                        <input type="text" id="register_mobile" name="register_mobile" class="form-control" placeholder="Mobile Number">
                     </div>            
                     <div class="form-group">
                         <button type="button" id="register_submit" class="btn-secondary">Submit</button>
@@ -113,8 +115,11 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="baseURL" value="<?php echo base_url(); ?>">
+<input type="hidden" id="tockenName" value="<?php echo $this->_ci->security->get_csrf_token_name(); ?>">
+<input type="hidden" id="tockenValue" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">
 <?php
-echo add_js(array('jquery.validate.min'));
+
 ?>
 </body>
 </html>

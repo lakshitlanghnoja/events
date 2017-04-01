@@ -378,3 +378,5 @@ $config['multilang_option'] = '0';
 
 // Section array used in whole website.
 $config['section_name'] = array('' => 'front', 'admin' => 'admin');
+
+$config['eventGalleryImageURL'] = 'http://localhost/events/themes/events/uploads/events/';

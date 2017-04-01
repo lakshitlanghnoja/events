@@ -27,7 +27,7 @@ class Users extends Base_Front_Controller {
     private function access_rules() {
         return array(
             array(
-                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'ajax_forgotPassword', 'regenerate_activation_link', 'logout', 'profile', 'ajax_login'),
+                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'ajax_forgotPassword', 'regenerate_activation_link', 'logout', 'profile', 'ajax_login', 'ajax_registration'),
                 'users' => array('*'),
             ),
             array(
@@ -53,7 +53,7 @@ class Users extends Base_Front_Controller {
         if (isset($this->session->userdata[$this->section_name]['user_id'])) {
             redirect("/");
         }
-
+        
         $postData = $this->input->post();
         if (!empty($postData)) {
             $email = trim(strip_tags($postData['email']));
@@ -152,12 +152,105 @@ class Users extends Base_Front_Controller {
     }
 
     /*
+     * Function redirect user on profile page after activates his account
+     */
+
+    public function login_user_directly($user_id) {
+        if ($user_id == '') {
+            redirect("/");
+        }
+        $userInfo = $this->users_model->get_user_detail($user_id);
+        $data['user_id'] = $userInfo['id'];
+        $data['role_id'] = $userInfo['role_id'];
+        $data['email'] = $userInfo['email'];
+        $data['firstname'] = $userInfo['firstname'];
+        $data['lastname'] = $userInfo['lastname'];
+        $data['logged_in'] = TRUE;
+
+        $this->allowed_permission_list($userInfo['role_id']);
+
+        $this->session->set_custom_userdata($this->section_name, $data);
+
+        //Update last login entry
+        $this->users_model->update_last_login($userInfo['id']);
+
+        redirect('users/profile');
+    }
+
+    /*
      *  Function logout to destroy all front session data
      */
 
     function logout() {
         $this->session->unset_userdata($this->section_name);
         redirect('/');
+        exit;
+    }
+
+    /*
+     * Function registration for ajax registration 
+     */
+
+    public function ajax_registration() {
+        $firstname = "";
+        $lastname = "";
+        $email = "";
+        $password = "";
+        $status = "";
+        $role_id = "";
+        $id = 0;
+        if ($this->input->post()) {
+            $post = $this->input->post();
+            $default_role = $this->users_model->get_default_role();
+
+            $firstname = trim(strip_tags($post['register_first_name']));
+            $lastname = trim(strip_tags($post['register_last_name']));
+            $email = trim(strip_tags($post['email']));
+            $password = trim(strip_tags($post['register_password']));
+            $role_id = intval($default_role['id']);
+            $date_of_birth = trim(strip_tags($post['register_dob']));
+            $mobile_number = trim(strip_tags($post['register_mobile']));
+
+
+            $status = 0;
+
+            $data_array['id'] = $id;
+            $data_array['firstname'] = $firstname;
+            $data_array['lastname'] = $lastname;
+            $data_array['email'] = $email;
+            $data_array['date_of_birth'] = $date_of_birth;
+            $data_array['mobile_number'] = $mobile_number;
+            if ($id == 0) {
+                $data_array['password'] = encriptsha1($password);
+            }
+            $data_array['role_id'] = $role_id;
+            $data_array['status'] = $status;
+            $data_array['activation_code'] = get_random_string(12);
+
+
+            $this->form_validation->set_rules('register_first_name', lang('first-name'), 'trim|required|min_length[2]|xss_clean');
+            $this->form_validation->set_rules('register_last_name', lang('last-name'), 'trim|required|min_length[2]|xss_clean');
+            //is_unique[users.email.id.' . $id . ']
+            $this->form_validation->set_rules('email', lang('email'), 'trim|required|valid_email|callback_check_unique_email|xss_clean');
+
+            if ($id == 0 || $id == "") {
+                $this->form_validation->set_rules('register_password', lang('password'), 'trim|required|xss_clean|min_length[4]|max_length[40]');
+            }
+
+            if ($this->form_validation->run($this) == TRUE) {
+                $flag = $this->users_model->save_user($data_array);
+                //$flag = $this->send_email($data_array, 'registration_template');
+                $return['status'] = 1;
+                $return['msg'] = 'Thank you for registering in our site! We have sent email on your email address. Please activate your account from link given in email.';
+            } else {
+                $return['status'] = 0;
+                $return['msg'] = 'Entered data is not valid.';
+            }
+        } else {
+            $return['status'] = 0;
+            $return['msg'] = 'Invalid request.';
+        }
+        echo json_encode($return);
         exit;
     }
 
@@ -315,6 +408,9 @@ class Users extends Base_Front_Controller {
 
                 //echo $captcha; exit;
                 //Render view
+                
+                $data['middle'] = 'create_event';
+                
                 $this->theme->view($data);
             } else {
                 $this->session->unset_userdata($this->section_name);
@@ -340,7 +436,7 @@ class Users extends Base_Front_Controller {
         $firstname = isset($data['firstname']) ? $data['firstname'] : '';
         $lastname = isset($data['lastname']) ? $data['lastname'] : '';
         $password = isset($data['password']) ? $data['password'] : '';
-        
+
         $activation_code = '';
         $mail_vars = array(
             'USERNAME' => $data['email'],
@@ -414,16 +510,25 @@ class Users extends Base_Front_Controller {
      */
 
     function activation($activation_key) {
+
         //Type casting
         $activation_key = strip_tags($activation_key);
 
         //Model function call
-        $flag = $this->users_model->activation($activation_key);
-
-        if ($flag == 1) {
-            $this->theme->set_message(lang('account-activation-msg'), 'success');
-        } elseif ($flag == 2) {
-            $this->theme->set_message(lang('activation_expiry-msg') . '<a href="' . base_url() . 'users/regenerate_activation_link/' . $activation_key . '">' . lang('regenerate_avtivation_link') . '</a>', 'error');
+        $result = $this->users_model->activation($activation_key);
+        if (is_array($result) && !empty($result)) {
+            $flag = (isset($result['flag']) && $result['flag'] != '') ? $result['flag'] : 0;
+            if ($flag == 1) {
+                $userId = (isset($result['user_id']) && $result['user_id'] != '') ? $result['user_id'] : 0;
+                if ($userId) {
+                    $this->login_user_directly($userId);
+                }
+                $this->theme->set_message(lang('account-activation-msg'), 'success');
+            } elseif ($flag == 2) {
+                $this->theme->set_message(lang('activation_expiry-msg') . '<a href="' . base_url() . 'users/regenerate_activation_link/' . $activation_key . '">' . lang('regenerate_avtivation_link') . '</a>', 'error');
+            } else {
+                $this->theme->set_message(lang('account-already-activated-msg'), 'error');
+            }
         } else {
             $this->theme->set_message(lang('account-already-activated-msg'), 'error');
         }
@@ -518,7 +623,7 @@ class Users extends Base_Front_Controller {
                         $forgot_array['email'] = $data['email'];
                         $forgot_array['password'] = $random_string;
                         $this->send_email($forgot_array, 'forgot_password_email_template');
-                        
+
                         $return['status'] = 1;
                         $return['msg'] = "We have sent login details on your email address. Please check your email.";
                     } else {
@@ -537,7 +642,7 @@ class Users extends Base_Front_Controller {
             $return['status'] = 0;
             $return['msg'] = "Please enter valid email address.";
         }
-        
+
         echo json_encode($return);
         exit;
     }

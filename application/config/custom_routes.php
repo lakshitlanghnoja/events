@@ -43,4 +43,7 @@
  $route["test2"] = "cms/index/test2";
  $route["home"] = "cms/index/home";
  $route["shopping"] = "cms/index/shopping";
+ $route["aboutus"] = "cms/index/aboutus";
+ $route["why-us"] = "cms/index/why-us";
+ $route["some-heading-for-footer"] = "cms/index/some-heading-for-footer";
 ?>

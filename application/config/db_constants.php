@@ -73,4 +73,8 @@ define('TBL_MODULE', 'modules');
 // for email template
 define('TBL_EMAIL_TEMPLATE', 'email_template');
 define('TBL_IMAGE_GALLERY','image_gallery');
+
+define('TBL_event','events');
+define('TBL_event_rating','event_rating');
+define('TBL_event_join','event_join');
 ?>

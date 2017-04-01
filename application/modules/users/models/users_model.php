@@ -50,6 +50,14 @@ class Users_model extends Base_Model
         if(isset($data['password']))
         {
             $user_data ['password'] = $data['password'];
+        }        
+        if(isset($data['date_of_birth']))
+        {
+            $user_data ['date_of_birth'] = date ('Y-m-d', strtotime($data['date_of_birth']));$data['date_of_birth'];
+        }
+        if(isset($data['mobile_number']))
+        {
+            $user_data ['mobile_number'] = $data['mobile_number'];
         }
         if(isset($data['last_login']))
         {
@@ -67,6 +75,10 @@ class Users_model extends Base_Model
         {
             $user_data ['modified'] = $data['modified'];
         }
+        if(isset($data['activation_code']))
+        {
+            $user_data ['activation_code'] = $data['activation_code'];
+        }
 
         if(isset($user_data['id']) &&  $user_data['id']!= 0 && $user_data['id'] != "")
         {
@@ -78,10 +90,11 @@ class Users_model extends Base_Model
         {
 
             $this->db->set('created', 'NOW()', FALSE);
-            if($this->db->insert($this->_tbl_users, $data))
+            $this->db->set('activation_expiry', 'NOW()', FALSE);
+            if($this->db->insert($this->_tbl_users, $user_data))
             {
                 $id = $this->db->insert_id();
-            }
+            }           
         }
         return $id;
     }
@@ -347,6 +360,7 @@ class Users_model extends Base_Model
 
         if(isset($user_data))
         {
+            
             $activation_expiry = $user_data[0]['u']['activation_expiry'];
             $now_date = date("Y-m-d H:i:s");
             if(strtotime($now_date) < strtotime($activation_expiry))
@@ -357,19 +371,22 @@ class Users_model extends Base_Model
                 );
                 $this->db->where('activation_code', '' . $activation_key . '');
                 $this->db->update($this->_tbl_users, $data);
-               $flag = 1;
+                $result['flag'] = 1;
+                $result['user_id'] = $user_data[0]['u']['id'];
+                
+               $flag = 1;   
             }
             else
             {
-               $flag = 2;
+               $result['flag'] = 2;
             }
 
         }
         else
         {
-             $flag = 3;
+             $result['flag'] = 3;
         }
-        return $flag;
+        return $result;
     }
 
     /**

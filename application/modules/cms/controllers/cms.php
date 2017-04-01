@@ -23,7 +23,7 @@ class Cms extends Base_Front_Controller
         //load helpers
         $this->load->helper(array('url', 'cookie'));
         //load theme        
-        $this->theme->set_theme("front");              
+        $this->theme->set_theme("events");              
     }
 
     /**

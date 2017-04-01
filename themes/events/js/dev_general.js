@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    $('#register_dob').datepicker({
+        maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+    });
+    
     $('#login_btn').click(function (e) {
         e.preventDefault();
         var email = $('#login_email').val();
@@ -25,18 +29,21 @@ $(document).ready(function () {
 
         $('#login_message').text('');
         $('#login_message').css('background-color', '#FFFFFF');
+        baseURL = $('#baseURL').val();
+        var URL = baseURL + 'users/ajax_login';
 
-        var URL = '<?php echo base_url(); ?>users/ajax_login';
+        tockenValue = $('#tockenValue').val();
+
         //alert(<?php echo $this->_ci->security->get_csrf_token_name(); ?>);
         $.ajax({
             type: 'POST',
             url: URL,
-            data: {'<?php echo $this->_ci->security->get_csrf_token_name(); ?>': '<?php echo $this->_ci->security->get_csrf_hash(); ?>', email: email, password: password},
+            data: {csrf_test_name: tockenValue, email: email, password: password},
             success: function (data) {
                 data = jQuery.parseJSON(data);
 
                 if (data.status == 1) {
-                    window.location.replace("<?php echo base_url(); ?>");
+                    window.location.replace(baseURL);
                 } else {
                     $('#login_message').text(data.msg);
                     $('#login_message').css('background-color', 'red');
@@ -71,11 +78,15 @@ $(document).ready(function () {
         $('#forgotPassword_message').text('');
         $('#forgotPassword_message').css('background-color', '#FFFFFF');
 
-        var URL = '<?php echo base_url(); ?>users/ajax_forgotPassword';
+
+        baseURL = $('#baseURL').val();
+        var URL = baseURL + 'users/ajax_forgotPassword';
+
+        tockenValue = $('#tockenValue').val();
         $.ajax({
             type: 'POST',
             url: URL,
-            data: {'<?php echo $this->_ci->security->get_csrf_token_name(); ?>': '<?php echo $this->_ci->security->get_csrf_hash(); ?>', email: email},
+            data: {csrf_test_name: tockenValue, email: email},
             success: function (data) {
                 data = jQuery.parseJSON(data);
 
@@ -112,7 +123,7 @@ $(document).ready(function () {
                 required: true,
                 noSpace: true
             },
-            register_email: {
+            email: {
                 required: true,
                 noSpace: true,
                 email: true
@@ -129,7 +140,8 @@ $(document).ready(function () {
             register_mobile: {
                 required: true,
                 noSpace: true,
-                number: true
+                number: true,
+                maxlength: 10,
             },
 
         },
@@ -142,7 +154,7 @@ $(document).ready(function () {
                 required: "Please enter your last name",
                 noSpace: "Please enter your last name"
             },
-            register_email: {
+            email: {
                 required: "Please enter your email address",
                 noSpace: "Please enter your email address",
                 email: "Please enter valid email address"
@@ -159,7 +171,8 @@ $(document).ready(function () {
             register_mobile: {
                 required: "Please enter postcode",
                 noSpace: "Please enter postcode",
-                number: "Please enter only digits"
+                number: "Please enter only digits",
+                maxlength: "enter only 10 digit of number"
             }
         },
         errorPlacement: function (error, element) {
@@ -167,11 +180,39 @@ $(document).ready(function () {
         }
     });
 
-    $('#register_submit').click(function () {
-        if ($('#registrationForm').valid()){
-               alert('success');
+    $('#register_submit').click(function (e) {
+        e.preventDefault();
+        if ($("#registrationForm").valid()) {
+            baseURL = $('#baseURL').val();
+            var URL = baseURL + 'users/ajax_registration';
+            formData = $('#registrationForm').serialize();
+            tockenValue = $('#tockenValue').val();
+            $.ajax({
+                type: 'POST',
+                url: URL,
+                data: formData,
+                success: function (data) {                    
+                    data = jQuery.parseJSON(data);                    
+                    if (data.status == 1) {                        
+                        $('#registrationForm').find("input[type=text], textarea").val("");
+                        $('#register_fom_message').text(data.msg);
+                        $('#register_fom_message').css('background-color', '#09F70D');
+                        $('#register_fom_message').css('padding', '5px');
+                        $('#register_fom_message').css('border-radius', '5px');
+                        $('#register_fom_message').css('margin-bottom', '10px');
+                        $('#register_fom_message').css('color', '#fff');
+                    } else {
+                        $('#register_fom_message').text(data.msg);
+                        $('#register_fom_message').css('background-color', 'red');
+                        $('#register_fom_message').css('padding', '5px');
+                        $('#register_fom_message').css('border-radius', '5px');
+                        $('#register_fom_message').css('margin-bottom', '10px');
+                        $('#register_fom_message').css('color', '#fff');
+                        return false;
+                    }
+                }
+            });
         }
-        
-        
+        return false;
     });
 });

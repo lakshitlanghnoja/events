@@ -1,18 +1,39 @@
-<tr class="content">
-    <td>
-        <table cellspacing="0" cellpadding="0">            
-	    <tr>
-                <td class="content-left" valign="top">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br />
-                    <br />
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>
-                <td width="5">&nbsp;</td>
-                <td class="content-center" valign="top" style="width:60%">
-		    <?php echo($cms[0]['c']['description']);?>		    
-                <td width="5">&nbsp;</td>
-                <td class="content-right" valign="top">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br />
-                    <br />
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>
-            </tr>
-        </table>
-    </td>
-</tr>
+<div class="search-panel">
+    <form class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Enter your destination">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <input type="text" id="datepicker" class="form-control" placeholder="Date">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <select class="custom-dropdown">
+                        <option>Duration</option>
+                        <option>Duration</option>
+                        <option>Duration</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" class="btn-secondary">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<section class="main-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2><?php echo($cms[0]['c']['title']);?></h2>
+                <?php echo($cms[0]['c']['description']);?>
+            </div>
+        </div>
+    </div>
+</section>

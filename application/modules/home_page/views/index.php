@@ -1,46 +1,5 @@
-<section class="banner">
-    <div id="banner-slider" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner" role="listbox">
-            <div class="item active">
-                <?php
-                echo add_image(array('slide01.jpg'));
-                ?>
-            </div>
-            <!-- <div class="item">
-              <img src="images/slide01.jpg" alt="">
-            </div> -->
-        </div>
-    </div>
-    <div class="search-panel">
-        <form class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Enter your destination">
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <input type="text" id="datepicker" class="form-control datepicker" placeholder="Date">
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <select class="custom-dropdown">
-                            <option>Duration</option>
-                            <option>Duration</option>
-                            <option>Duration</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <button type="submit" class="btn-secondary">Search</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</section>
-<section class="main-content">
+
+<section class="main-content pb0">
     <div class="container">
         <h1>Page Header</h1>
         <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -95,7 +54,7 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
@@ -103,7 +62,7 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
@@ -111,7 +70,7 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
@@ -119,7 +78,7 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
@@ -127,7 +86,7 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
@@ -135,7 +94,7 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
@@ -143,7 +102,7 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
@@ -151,11 +110,81 @@
             <div class="col-sm-3">
                 <div class="thumbnail">
                     <a href="#" title="Destination">
-                        <?php echo add_image(array('destination02.jpg'),'','',array('alt' => 'Destination','class'=>'img-responsive')); ?>
+                        <?php echo add_image(array('destination02.jpg'), '', '', array('alt' => 'Destination', 'class' => 'img-responsive')); ?>
                     </a>
                     <span class="btn-outer"><a href="#" title="View Details" class="btn-secondary">View Details</a></span>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="content-wrap">
+        <div class="container">
+            <?php
+            if (isset($data['footerSectionTitle']) && $data['footerSectionTitle'] != '') {
+                ?>
+                <h2 class="text-center"><?php echo $data['footerSectionTitle']; ?></h2>
+                <?php
+            }
+            if (isset($data['footerSectionDescription']) && $data['footerSectionDescription'] != '') {
+                $tags = array("&lt;p&gt;", "&lt;/p&gt;");
+                ?>
+                <p class="text-center"><?php echo str_replace($tags, "", $data['footerSectionDescription']); ?></p>
+                <?php
+            }
+            ?>            
+            <div class="row">
+                <div class="col-sm-6">
+                    <?php
+                    if (isset($data['aboutUsTitle']) && $data['aboutUsTitle'] != '') {
+                        ?>
+                        <h3><?php echo str_replace($tags, "", $data['aboutUsTitle']); ?></h3>
+                        <?php
+                    }
+                    if (isset($data['aboutUsDescription']) && $data['aboutUsDescription'] != '') {
+                        $content = str_replace($tags, "", $data['aboutUsDescription']);
+                        $content = implode(' ', array_slice(explode(' ', $content), 0, 100));
+                        ?>
+                        <p class="pb0"><?php echo $content; ?>                        
+                        </p>
+                        
+                        <?php                        
+                        $detailLink =  base_url('/cms/index/'.$data['aboutUsSlug']);
+                        ?>
+                        <div class="contentReadMoreLink"><a href="<?php echo $detailLink;?>">Read More</a></div>
+                        <?php
+                    }
+                    ?>
+
+                </div>
+                <div class="col-sm-6">
+                    <?php
+                    if (isset($data['whyUsTitle']) && $data['whyUsTitle'] != '') {
+                        ?>
+                        <h3><?php echo str_replace($tags, "", $data['whyUsTitle']); ?></h3>
+                        <?php
+                    }
+                    if (isset($data['whyUsDescription']) && $data['whyUsDescription'] != '') {
+                        $content = str_replace($tags, "", $data['whyUsDescription']);
+                        $content = implode(' ', array_slice(explode(' ', $content), 0, 100));
+                        ?>
+                        <p class="pb0"><?php echo $content; ?></p>
+                        <?php                        
+                        $detailLink =  base_url('/cms/index/'.$data['whyUsSlug']);
+                        ?>
+                        <div class="contentReadMoreLink"><a href="<?php echo $detailLink;?>">Read More</a></div>
+                        <?php
+                    }
+                    ?>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 </section>
+<style>
+    .contentReadMoreLink{width: 100%; text-align: right;}
+    .contentReadMoreLink a{color:#0070b1}
+    .contentReadMoreLink a:hover{color:#6a6c6e}
+</style>
