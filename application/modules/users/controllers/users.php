@@ -409,7 +409,14 @@ class Users extends Base_Front_Controller {
                 //echo $captcha; exit;
                 //Render view
                 
-                $data['middle'] = 'create_event';
+                $data['createEventView'] = 'create_event';
+                $data['editProfileView'] = 'edit_profile';
+                $data['accountDetailsView'] = 'account_details';
+                $data['reviewByYouView'] = 'reviewByYou';
+                $data['reviewForYouView'] = 'reviewforYou';
+                $data['yourTripsView'] = 'yourTrips';
+                $data['yourTripsHostingsView'] = 'yourHostings';
+                $data['faqVeiw'] = 'faq';
                 
                 $this->theme->view($data);
             } else {
