@@ -27,7 +27,7 @@ class Users extends Base_Front_Controller {
     private function access_rules() {
         return array(
             array(
-                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'ajax_forgotPassword', 'regenerate_activation_link', 'logout', 'profile', 'ajax_login', 'ajax_registration'),
+                'actions' => array('action', 'index', 'login', 'registration', 'send_email', 'user_validation_rules', 'activation', 'recaptcha', 'forgot_password', 'ajax_forgotPassword', 'regenerate_activation_link', 'logout', 'profile', 'ajax_login', 'ajax_registration', 'editProfileImage', 'removeProfileImage'),
                 'users' => array('*'),
             ),
             array(
@@ -53,7 +53,7 @@ class Users extends Base_Front_Controller {
         if (isset($this->session->userdata[$this->section_name]['user_id'])) {
             redirect("/");
         }
-        
+
         $postData = $this->input->post();
         if (!empty($postData)) {
             $email = trim(strip_tags($postData['email']));
@@ -70,6 +70,7 @@ class Users extends Base_Front_Controller {
                         $data['email'] = $result[0]['u']['email'];
                         $data['firstname'] = $result[0]['u']['firstname'];
                         $data['lastname'] = $result[0]['u']['lastname'];
+                        $data['profileImage'] = $result[0]['u']['profile_image'];
                         $data['logged_in'] = TRUE;
 
                         $this->allowed_permission_list($data['role_id']);
@@ -128,6 +129,7 @@ class Users extends Base_Front_Controller {
                         $data['email'] = $result[0]['u']['email'];
                         $data['firstname'] = $result[0]['u']['firstname'];
                         $data['lastname'] = $result[0]['u']['lastname'];
+                        $data['profileImage'] = $result[0]['u']['profile_image'];
                         $data['logged_in'] = TRUE;
 
                         $this->allowed_permission_list($data['role_id']);
@@ -337,16 +339,44 @@ class Users extends Base_Front_Controller {
      */
 
     public function profile() {
-
-
-
         $CI = & get_instance();
         $id = $this->session->userdata[$this->section_name]['user_id'];
+        
+        if ($this->input->post('action') == 'editProfileImage') {
+            if (!empty($_FILES['user_profile']['name'])) {
+                $user_id = $this->session->userdata[$this->section_name]['user_id'];
+                $fileName = '';
+                $fileNameArray = explode('.', $_FILES['user_profile']['name']);
+                $fileNameExt = end($fileNameArray);
+                array_pop($fileNameArray);
+                $fileName = implode('.', $fileNameArray) . '_' . $user_id . '.' . $fileNameExt;
 
+                $_FILES['user_profile']['name'] = $fileName;
+                $_FILES['user_profile']['type'] = $_FILES['user_profile']['type'];
+                $_FILES['user_profile']['tmp_name'] = $_FILES['user_profile']['tmp_name'];
+                $_FILES['user_profile']['error'] = $_FILES['user_profile']['error'];
+                $_FILES['user_profile']['size'] = $_FILES['user_profile']['size'];
+
+                $uploadPath = $CI->config->item('userImagePath');
+
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = 'jpg|png';
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('user_profile')) {
+
+                    $fileData = $this->upload->data();
+                    $profileImageData['profile_image'] = $fileData['file_name'];
+
+                    $this->users_model->updateProfileImage($profileImageData, $user_id);                    
+                    $this->session->set_custom_userdata($this->section_name, array('profileImage' => $fileData['file_name']));   
+                }
+            }
+        }
+        
         if (!empty($id)) {
-
             $result = $this->users_model->get_user_detail($id);
-
             if (!empty($result) && $result['status'] == 1) {
                 //Variable Assignment
                 $firstname = $result['firstname'];
@@ -355,13 +385,35 @@ class Users extends Base_Front_Controller {
                 $status = $result['status'];
                 $role_id = $result['role_id'];
 
+                //accounts tab
+                $accountResult = $this->users_model->get_user_account_detail($id);
 
-                if (!$this->input->post('mysubmit'))
-                    $captcha = $this->my_captcha->deleteImage()->createWord()->createCaptcha();
+                //Review By You Tab
+                $reviewByYou = $this->users_model->getReviewByUser($id);
 
+                //Review for yo tab
+                $reviewForYou = $this->users_model->getReviewForYou($id);
+
+                //FAQ tab               
+                $faqModel = $this->load->model('faq/faq_model');
+                $userFAQ = $faqModel->get_record_listing();
+
+                //Your Trips tab
+                $tripsJoinByYou = $this->users_model->getEventsJoinedByUser($id);
+
+                // Your Hostings tab
+                $tripsCreatedByYou = $this->users_model->getEventsCreatedByUser($id);
+                $tripJoinedData = $this->users_model->getTripJoinDataByTripCreatorId($id);
+                $redeemAmount = array();
+                if (is_array($tripJoinedData) && !empty($tripJoinedData)) {
+                    $redeemAmount = $this->CateculateRedeemAmount($tripJoinedData);
+                }
 
                 //If form submit
-                if ($this->input->post('mysubmit')) {
+                //pre($this->input->post());
+
+
+                if ($this->input->post('formAction') == 'edit_profile') {
                     $post = $this->input->post();
 
                     //$default_role = $this->users_model->get_default_role();
@@ -372,6 +424,10 @@ class Users extends Base_Front_Controller {
                     $lastname = trim(strip_tags($post['lastname']));
                     $email = trim(strip_tags($post['email']));
                     $role_id = $post['role_id'];
+                    $date_of_birth = $post['date_of_birth'];
+                    $mobile_number = $post['mobile_number'];
+                    $social_media_link = $post['social_media_link'];
+                    $about_me = $post['about_me'];
 
                     $status = 1;
 
@@ -382,42 +438,48 @@ class Users extends Base_Front_Controller {
                     $data_array['email'] = $email;
                     $data_array['role_id'] = $role_id;
                     $data_array['status'] = $status;
+                    $data_array['date_of_birth'] = $date_of_birth;
+                    $data_array['mobile_number'] = $mobile_number;
+                    $data_array['social_media_link'] = $social_media_link;
+                    $data_array['about_me'] = $about_me;
 
-
+                    //pre($data_array);
                     // field name, error message, validation rules
-                    $this->profile_validation_rules();
-                    if ($this->form_validation->run($this) == TRUE) {
-                        //echo "IN"; exit;
-                        $this->users_model->save_profile($data_array);
-                        $this->theme->set_message(lang('edit-profile-success'), 'success');
+                    //$this->profile_validation_rules();
+
+                    $this->users_model->save_profile($data_array);
+                    $this->theme->set_message(lang('edit-profile-success'), 'success');
+                    redirect(base_url() . "users/profile");
+                }
+
+                if ($this->input->post('formAction') == 'update_account_details') {
+                    $post = $this->input->post();
+                    $userId = $post['user_id'];
+                    $paypalAccountId = $post['paypalAccountId'];
+                    $accountId = $post['id'];
+                    if ($userId != '' || $userId != '0') {
+                        $data_array['id'] = $accountId;
+                        $data_array['user_id'] = $userId;
+                        $data_array['paypal_account_id'] = $paypalAccountId;
+                        $this->users_model->save_accountDetails($data_array);
                         redirect(base_url() . "users/profile");
-                    } else {
-                        $captcha = $this->my_captcha->deleteImage()->createWord()->createCaptcha();
                     }
                 }
 
                 //Pass data to view file
-                $data['firstname'] = $firstname;
-                $data['lastname'] = $lastname;
-                $data['email'] = $email;
-                $data['role_id'] = $role_id;
-                $data['status'] = $status;
-                $data['captcha'] = $captcha;
+                $data['user_profile'] = $result;
+                $data['user_account'] = $accountResult;
+                $data['review_by_user'] = $reviewByYou;
+                $data['review_for_user'] = $reviewForYou;
+                $data['trip_join_by_you'] = $tripsJoinByYou;
+                $data['trip_created_by_you'] = $tripsCreatedByYou;
+                $data['redeemAmount'] = $redeemAmount;
+                $data['userFAQ'] = $userFAQ;
                 $data['ci'] = $CI;
                 $data['id'] = $id;
 
                 //echo $captcha; exit;
                 //Render view
-                
-                $data['createEventView'] = 'create_event';
-                $data['editProfileView'] = 'edit_profile';
-                $data['accountDetailsView'] = 'account_details';
-                $data['reviewByYouView'] = 'reviewByYou';
-                $data['reviewForYouView'] = 'reviewforYou';
-                $data['yourTripsView'] = 'yourTrips';
-                $data['yourTripsHostingsView'] = 'yourHostings';
-                $data['faqVeiw'] = 'faq';
-                
                 $this->theme->view($data);
             } else {
                 $this->session->unset_userdata($this->section_name);
@@ -428,6 +490,65 @@ class Users extends Base_Front_Controller {
             $this->theme->set_message(lang('do-login-msg-edit-profile'), 'info');
             redirect(site_url() . 'users/login');
         }
+    }
+
+    public function CateculateRedeemAmount($tripJoinedData) {
+
+        $redeemAmount = array();
+        if (is_array($tripJoinedData) && !empty($tripJoinedData)) {
+            $eventId = '';
+            $amount = 0;
+            $requested_amount = 0;
+            $i = 0;
+            $temp_id = array();
+
+            foreach ($tripJoinedData as $joinData) {
+                if ($joinData['e']['eid'] != $eventId) {
+                    $eventId = $joinData['e']['eid'];
+                    $amount = 0;
+                    $requested_amount = 0;
+                    $temp_id = array();
+                }
+                if (isset($joinData['ep']['payment_gross']) && $joinData['ep']['payment_gross'] != '') {
+                    if (isset($joinData['ej']['completed_at']) && $joinData['ej']['completed_at'] != '') {
+                        if (isset($joinData['er']['rate']) && $joinData['er']['rate'] != '') {
+                            if (isset($joinData['ej']['redeem_status']) && $joinData['ej']['redeem_status'] == 2) {
+                                $requested_amount += $joinData['ep']['payment_gross'];
+                            } else {
+                                $day_diff = 5 - $joinData['er']['rate'];
+                                $date = strtotime($joinData['ej']['completed_at']);
+                                $date = strtotime("+" . $day_diff . " day", $date);
+                                $issue_date = date('m-d-Y', $date);
+                                if ($issue_date == date('m-d-Y')) {
+                                    //$redeemAmount[$eventId]['date'] = $issue_date;
+                                    $temp_id[] = $joinData['ej']['id'];
+                                    $amount += $joinData['ep']['payment_gross'];
+                                }
+                            }
+                        }
+                    }
+                }
+                $temp_id_string = implode(',', $temp_id);
+                $redeemAmount[$eventId]['amount'] = $amount;
+                $redeemAmount[$eventId]['requested_amount'] = $requested_amount;
+                $redeemAmount[$eventId]['join_ids'] = $temp_id_string;
+                $i++;
+            }
+        }
+//        echo "<pre>";
+//        print_r($redeemAmount);
+//        echo "</pre>";
+//        pre($tripJoinedData);
+        return $redeemAmount;
+    }
+
+    public function removeProfileImage($user_id){
+        if(isset($user_id) && $user_id != ''){
+            $data['profile_image'] = '';
+            $this->users_model->updateProfileImage($data, $user_id);
+            $this->session->set_custom_userdata($this->section_name, array('profileImage' => '')); 
+        }
+        redirect('users/profile');
     }
 
     /**

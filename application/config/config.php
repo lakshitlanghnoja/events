@@ -20,7 +20,7 @@ $config['base_url']	= '';
 |--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
-|
+|   
 | Typically this will be your index.php file, unless you've renamed it to
 | something else. If you are using mod_rewrite to remove the page set this
 | variable so that it is blank.
@@ -297,9 +297,10 @@ $config['global_xss_filtering'] = TRUE;
 | 'csrf_expire' = The number in seconds the token should expire.
 */
 $config['csrf_protection'] = TRUE;
-$config['csrf_token_name'] = 'csrf_test_name';
+$config['csrf_token_name'] = 'tture_token';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -379,4 +380,12 @@ $config['multilang_option'] = '0';
 // Section array used in whole website.
 $config['section_name'] = array('' => 'front', 'admin' => 'admin');
 
-$config['eventGalleryImageURL'] = 'http://localhost/events/themes/events/uploads/events/';
+$config['eventGalleryImageURL'] = 'http://localhost/tture/themes/events/uploads/events/';
+$config['userImageURL'] = 'http://localhost/tture/themes/events/uploads/users/';
+$config['userImagePath'] = 'themes/events/uploads/users';
+
+$config['paypal_Live'] = 0;
+$config['Paypal_URL'] = ($config['paypal_Live'] == 1) ? 'https://www.paypal.com/cgi-bin/webscr' : 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+
+$config['admin_paypal_id'] = 'personal146@test.com';
+

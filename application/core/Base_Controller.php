@@ -357,11 +357,12 @@ class Base_Controller extends MX_Controller
         $method_name = get_method($this);
         $module_name = get_module($this);
         $uri = $section_name . '.' . $module_name . '.' . $method_name;
-
+        
         $permission_array = $this->session->userdata[$this->section_name]['permissions'];
         
         if (isset($this->session->userdata[$this->section_name]['super_user']) && $this->session->userdata[$this->section_name]['super_user'] == '1')
-        {            
+        {
+           
             return true;
         }
         if (is_array($permission_array))

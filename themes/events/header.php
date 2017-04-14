@@ -48,23 +48,46 @@
                                 <?php
                                 if (isset($this->_ci->session->userdata['front']['logged_in']) && $this->_ci->session->userdata['front']['logged_in'] == 1) {
                                     //echo "<pre>"; print_r($this->_ci->session->userdata['front']); echo "</pre>";
-                                    $name = $this->_ci->session->userdata['front']['firstname'] . " ". $this->_ci->session->userdata['front']['lastname']
+                                    $name = $this->_ci->session->userdata['front']['firstname'] . " " . $this->_ci->session->userdata['front']['lastname'];
+                                    $profileImage_name = $this->_ci->session->userdata['front']['profileImage'];
+                                    $profileImageURL = '';
+                                    if ($profileImage_name != '') {
+                                        $profileImageURL = $this->_ci->config->item('userImageURL') . $profileImage_name;
+                                    }
                                     ?>
                                     <ul class="clearfix">
                                         <li class="username visible-xs">
-                                            Welcome <?php echo $name;?> <?php echo add_image(array('dummy.jpg')); ?>
+                                            Welcome <?php echo $name; ?> 
+                                            <?php
+                                            if ($profileImageURL != '') {
+                                                ?>
+                                                <img src="<?php echo $profileImageURL; ?>" />
+                                                <?php
+                                            } else {
+                                                echo add_image(array('dummy.jpg'));
+                                            }
+                                            ?>                                            
                                         </li>
                                         <li class="visible-xs">
-                                            <a href="<?php echo base_url('users/profile');?>" title="Edit Profile">Edit Profile</a>
+                                            <a href="<?php echo base_url('users/profile'); ?>" title="Edit Profile">Edit Profile</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo base_url('/users/logout');?>" title="Logout">Logout</a>
+                                            <a href="<?php echo base_url('/users/logout'); ?>" title="Logout">Logout</a>
                                         </li>
                                         <li class="hidden-xs">
-                                            <a href="<?php echo base_url('users/profile');?>" title="Edit Profile">Edit Profile</a>
+                                            <a href="<?php echo base_url('users/profile'); ?>" title="Edit Profile">Edit Profile</a>
                                         </li>
                                         <li class="username hidden-xs">
-                                            Welcome <?php echo $name;?> <?php echo add_image(array('dummy.jpg')); ?>
+                                            Welcome <?php echo $name; ?> 
+                                            <?php
+                                            if ($profileImageURL != '') {
+                                                ?>
+                                                <img src="<?php echo $profileImageURL; ?>" />
+                                                <?php
+                                            } else {
+                                                echo add_image(array('dummy.jpg'));
+                                            }
+                                            ?>
                                         </li>
                                     </ul>
                                     <?php
@@ -92,11 +115,11 @@
                 // search pannel for inner pages.
                 ?>
                 <div class="search-panel">
-                    <form class="container">
+                    <form class="container" id="searchResultSearchForm" method="post" action="<?php echo site_url('events/search') ?>">
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter your destination">
+                                    <input type="text" name="search_term" class="form-control" value="<?php echo (isset($data['search_term'])) ? $data['search_term'] : ''; ?>" placeholder="Enter your destination">
                                 </div>
                             </div>
                             <div class="col-sm-3">
@@ -114,7 +137,10 @@
                                 </div>
                             </div>
                             <div class="col-sm-2">
-                                <button type="submit" class="btn-secondary">Search</button>
+                                <input type="hidden" onchange="submitSearchForm('searchResultSearchForm')" name="filter_duration" id="filter_duration" value="<?php echo (isset($data['filter_duration'])) ? $data['filter_duration'] : '2'; ?>" />
+                                <input type="hidden" onchange="submitSearchForm('searchResultSearchForm')" name="filter_price" id="filter_price" value="<?php echo (isset($data['filter_price'])) ? $data['filter_price'] : '2'; ?>" />
+                                <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">					
+                                    <button type="submit" class="btn-secondary">Search</button>
                             </div>
                         </div>
                     </form>
@@ -130,20 +156,20 @@
                                 echo add_image(array('slide01.jpg'));
                                 ?>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="search-panel">
-                        <form class="container">
+                        <form class="container" id="searchResultSearchForm" method="post" action="<?php echo site_url('events/search') ?>">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Enter your destination">
+                                        <input type="text" name="search_term" class="form-control" value="<?php echo (isset($data['search_term'])) ? $data['search_term'] : ''; ?>" placeholder="Enter your destination">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <input type="text" id="datepicker" class="form-control datepicker" placeholder="Date">
+                                        <input type="text" id="datepicker" class="form-control" placeholder="Date">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -156,7 +182,10 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
-                                    <button type="submit" class="btn-secondary">Search</button>
+                                    <input type="hidden" onchange="submitSearchForm('searchResultSearchForm')" name="filter_duration" id="filter_duration" value="<?php echo (isset($data['filter_duration'])) ? $data['filter_duration'] : '2'; ?>" />
+                                    <input type="hidden" onchange="submitSearchForm('searchResultSearchForm')" name="filter_price" id="filter_price" value="<?php echo (isset($data['filter_price'])) ? $data['filter_price'] : '2'; ?>" />
+                                    <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">					
+                                        <button type="submit" class="btn-secondary">Search</button>
                                 </div>
                             </div>
                         </form>
@@ -165,3 +194,7 @@
                 <?php
             }
             ?>
+            <div class="message_div">
+                <?php echo $this->message(); ?>
+            </div>
+

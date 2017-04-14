@@ -2,7 +2,10 @@ $(document).ready(function () {
     $('#register_dob').datepicker({
         maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 18))
     });
-    
+    $('#date_of_birth').datepicker({
+        maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+    });
+
     $('#login_btn').click(function (e) {
         e.preventDefault();
         var email = $('#login_email').val();
@@ -38,7 +41,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: URL,
-            data: {csrf_test_name: tockenValue, email: email, password: password},
+            data: {tture_token: tockenValue, email: email, password: password},
             success: function (data) {
                 data = jQuery.parseJSON(data);
 
@@ -86,7 +89,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: URL,
-            data: {csrf_test_name: tockenValue, email: email},
+            data: {tture_token: tockenValue, email: email},
             success: function (data) {
                 data = jQuery.parseJSON(data);
 
@@ -108,6 +111,61 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+    $('#completeEvent_btn').click(function (e) {
+        e.preventDefault();
+        var rate = $('#eventRating').val();
+        if (rate == '') {
+            $('#eventComplete_message').text('Please give some rate');
+            $('#eventComplete_message').css('background-color', 'red');
+            $('#eventComplete_message').css('padding', '5px');
+            $('#eventComplete_message').css('border-radius', '5px');
+            $('#eventComplete_message').css('margin-bottom', '10px');
+            $('#eventComplete_message').css('color', '#fff');
+            return false;
+        }
+        $('#eventComplete_message').text('');
+        $('#eventComplete_message').css('background-color', '#FFFFFF');
+        
+        var eventJoinId = $('#submitRateEventJoinId').val();
+        
+        var data = $('#completeEventForm').serialize();
+        baseURL = $('#baseURL').val();
+        var URL = baseURL + 'events/complete_event';
+
+        tockenValue = $('#tockenValue').val();
+        $.ajax({
+            type: 'POST',
+            url: URL,
+            data: data,
+            success: function (data) {
+                data = jQuery.parseJSON(data);
+
+                if (data.status == 1) {
+                    $('#eventComplete_message').text(data.msg);
+                    $('#eventComplete_message').css('background-color', '#09F70D');
+                    $('#eventComplete_message').css('padding', '5px');
+                    $('#eventComplete_message').css('border-radius', '5px');
+                    $('#eventComplete_message').css('margin-bottom', '10px');
+                    $('#eventComplete_messages').css('color', '#fff');
+                    setTimeout(function () {
+                        $('#completeEventCloseButton').trigger('click');
+                        $('#event_join_'+eventJoinId).hide();
+                    }, 1500);
+                    
+                } else {
+                    $('#eventComplete_message').text(data.msg);
+                    $('#eventComplete_message').css('background-color', 'red');
+                    $('#eventComplete_message').css('padding', '5px');
+                    $('#eventComplete_message').css('border-radius', '5px');
+                    $('#eventComplete_message').css('margin-bottom', '10px');
+                    $('#eventComplete_messages').css('color', '#fff');
+                    return false;
+                }
+            }
+        });
+
     });
 
     jQuery.validator.addMethod("noSpace", function (value, element) {
@@ -172,7 +230,7 @@ $(document).ready(function () {
                 required: "Please enter postcode",
                 noSpace: "Please enter postcode",
                 number: "Please enter only digits",
-                maxlength: "enter only 10 digit of number"
+                maxlength: "Enter only 10 digit of number"
             }
         },
         errorPlacement: function (error, element) {
@@ -191,9 +249,9 @@ $(document).ready(function () {
                 type: 'POST',
                 url: URL,
                 data: formData,
-                success: function (data) {                    
-                    data = jQuery.parseJSON(data);                    
-                    if (data.status == 1) {                        
+                success: function (data) {
+                    data = jQuery.parseJSON(data);
+                    if (data.status == 1) {
                         $('#registrationForm').find("input[type=text], textarea").val("");
                         $('#register_fom_message').text(data.msg);
                         $('#register_fom_message').css('background-color', '#09F70D');
@@ -214,5 +272,77 @@ $(document).ready(function () {
             });
         }
         return false;
+    });
+
+    $("#profile_form").validate({
+        rules: {
+            firstname: {
+                required: true,
+                noSpace: true
+            },
+            lastname: {
+                required: true,
+                noSpace: true
+            },
+            email: {
+                required: true,
+                noSpace: true,
+                email: true
+            },
+            date_of_birth: {
+                required: true,
+                noSpace: true,
+                date: true
+            },
+            mobile_number: {
+                required: true,
+                noSpace: true,
+                number: true,
+                maxlength: 10,
+            },
+            social_media_link: {
+                url: true
+            }
+
+        },
+        messages: {
+            firstname: {
+                required: "Please enter first name",
+                noSpace: "Please enter first name",
+            },
+            lastname: {
+                required: "Please enter last name",
+                noSpace: "Please enter last name",
+            },
+            email: {
+                required: "Please enter email address",
+                noSpace: "Please enter email address",
+                email: "Please enter valid email address",
+            },
+            date_of_birth: {
+                required: "Please enter date of birth",
+                noSpace: "Please enter date of birth",
+                date: "Please enter valid date",
+            },
+            mobile_number: {
+                required: "Please enter mobile number",
+                noSpace: "Please enter mobile number",
+                number: "Please enter valid mobile number",
+                maxlength: "Enter only 10 digit of number",
+            },
+            social_media_link: {
+                url: "Please enter valid URL"
+            }
+        },
+        errorPlacement: function (error, element) {
+            element.after(error);
+        }
+    });
+
+    $('.updateProfileForm').click(function (e) {
+        e.preventDefault();
+        if ($("#profile_form").valid()) {
+            $('#profile_form').submit();
+        }
     });
 });

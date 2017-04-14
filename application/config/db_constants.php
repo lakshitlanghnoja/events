@@ -77,4 +77,11 @@ define('TBL_IMAGE_GALLERY','image_gallery');
 define('TBL_event','events');
 define('TBL_event_rating','event_rating');
 define('TBL_event_join','event_join');
+define('TBL_USER_ACCOUNT','user_payment_account');
+define('TBL_EVENT_RATING','event_rating');
+define('TBL_FAQ','faq');
+define('TBL_EVENT_JOIN','event_join');
+define('TBL_EVENT_JOIN_PAYMENT','event_join_payment');
+define('TBL_REQUEST_REDEEM','request_redeem');
+define('TBL_EVENT_REDEEM_PAYMENT','event_redeem_payment');
 ?>

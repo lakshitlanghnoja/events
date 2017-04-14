@@ -115,11 +115,44 @@
         </div>
     </div>
 </div>
+
+
+<!-- Event Completion Modal -->
+<div class="modal fade" id="completeEventModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <a href="#" title="Close" data-dismiss="modal" id="completeEventCloseButton" class="modal-close"><i class="fa fa-close"></i></a>
+        <div class="modal-content">
+            <div class="modal-body">
+                
+                <h3>Say something about the event</h3>
+                <form action="" method="post" id="completeEventForm">
+                    <div id="eventComplete_message">
+                        
+                    </div>
+                    <div class="form-group">
+                        <lable>Give Rating:</lable>
+                        <input type="number" min="1" max="5" id="eventRating" name="eventRate" class="form-control" placeholder="Give Rate" value="1">
+                    </div>
+                    <div class="form-group">
+                        <lable>Your Review:</lable>
+                        <textarea name="review" id="review" class="form-control"></textarea>
+                    </div>
+                    <input type="hidden" name="event_id" id="submitRateEventId" value="">
+                    <input type="hidden" name="event_join_id" id="submitRateEventJoinId" value="">
+                    <input type="hidden" name="user_id" id="submitRateUserId" value="<?php echo $this->_ci->session->userdata['front']['user_id'];?>">
+                    <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">
+                    <div class="form-group">
+                        <button type="submit" id="completeEvent_btn" class="btn-secondary">Submit</button>                        
+                    </div>
+                </form>  
+            </div>
+        </div>
+    </div>
+</div>
+
 <input type="hidden" id="baseURL" value="<?php echo base_url(); ?>">
 <input type="hidden" id="tockenName" value="<?php echo $this->_ci->security->get_csrf_token_name(); ?>">
 <input type="hidden" id="tockenValue" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">
-<?php
 
-?>
 </body>
 </html>

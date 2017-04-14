@@ -1,8 +1,12 @@
 <?php
 $ci = get_instance(); // CI_Loader instance
+$login = ((isset($ci->session->userdata['front']['logged_in'])) && $ci->session->userdata['front']['logged_in'] == 1) ? $ci->session->userdata['front']['logged_in'] : 0;
 ?>
 
-
+<style>
+    .taxDescriptionTable{width: 100%;}
+    .taxDescriptionTable .valueCell{text-align: left; padding-left: 15px; width: 11%;}
+</style>
 <section class="main-content">
     <div class="container">
         <div class="row">
@@ -104,7 +108,7 @@ $ci = get_instance(); // CI_Loader instance
                                             $sheetsLeft = $data['sheet'] - $totalJoined;
                                             ?>
                                             <label>No. of seats left:</label>
-                                            <?php echo $sheetsLeft;?> / <?php echo $data['sheet']; ?>
+                                            <?php echo $sheetsLeft; ?> / <?php echo $data['sheet']; ?>
                                         </li>
                                         <li>
                                             <label>Transportation:</label>
@@ -131,25 +135,82 @@ $ci = get_instance(); // CI_Loader instance
                     <div class="form-group">
                         <?php
                         $totalSheets = $data['sheet'];
+                        $disable = ($sheetsLeft == 0) ? 'disabled="disabled"' : '';
                         ?>
-                        <select class="custom-dropdown">
+                        <select class="custom-dropdown" id="totalSheets" name="totalSheets" <?php echo $disable;?>>
                             <?php
-                            for ($i = 1; $i <= $totalSheets; $i++) {
+                            if ($sheetsLeft != 0) {
+                                for ($i = 1; $i <= $sheetsLeft; $i++) {
+                                    ?>
+                                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                    <?php
+                                }
+                            }
+                            else{
                                 ?>
-                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                <?php
+                                    <option value="">All sheets are booked</option>
+                                    <?php
                             }
                             ?>
                         </select>
                     </div>
                     <div class="form-group text-right">
-                        <label>Total:</label>
-                        <strong>$<?php echo $data['price']; ?>/ Per Person</strong>
+                        <?php
+                        $totalAmount = $data['price'];
+                        $tax = 0;
+                        if (isset($tax_persent) && $tax_persent != 0) {
+                            $tax = ((isset($tax_persent['tax'])) && $tax_persent['tax'] != '') ? $tax_persent['tax'] : 0;
+
+                            if ($tax != 0) {
+                                $tax = $tax_persent['tax'];
+                                $tax_amount = $data['price'] * ($tax_persent['tax'] / 100);
+                                $totalAmount = $data['price'] + $tax_amount;
+                                ?>
+                                <div class="row">
+                                    <table class="taxDescriptionTable">
+                                        <tr>
+                                            <td class="lableCell"><label>Event Amount:</label></td>
+                                            <td class="valueCell">$<?php echo $data['price']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lableCell"><label>Tax:</label></td>
+                                            <td class="valueCell"><?php echo $tax_persent['tax']; ?>%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lableCell"><label>Total:</label></td>
+                                            <td class="valueCell"><span id="totalAmountDiv"> $<?php echo $data['price'] + $tax_amount; ?></span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <?php
+                            } else {
+                                ?>
+                                <label>Total:</label>
+                                <strong>$<?php echo $data['price']; ?>/ Per Person</strong>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <label>Total:</label>
+                            <strong>$<?php echo $data['price']; ?>/ Per Person</strong>
+                            <?php
+                        }
+                        ?>
+
                     </div>
+                    <input type="hidden" id="eventAmount" name="eventAmount" value="<?php echo $data['price'];?>">
+                    <input type="hidden" id="tax" name="tax" value="<?php echo $tax;?>">
+                    <input type="hidden" id="totalAmount" name="amount" value="<?php echo $totalAmount; ?>">
                     <?php
-                    $disable = ($sheetsLeft < 1)? 'disabled="disabled"' : '';
+                    $disable = ($sheetsLeft < 1) ? 'disabled="disabled"' : '';
+                    
                     ?>
-                    <span class="clearfix"><button type="submit" class="btn-secondary btn-small pull-right"  <?php echo $disable;?> onclick="alert('f');">Join</button></span>
+                    <span class="clearfix">
+                        <button id="join_event" class="btn-secondary btn-small pull-right"  <?php echo $disable; ?> login="<?php echo $login;?>">Join</button>
+                        <span id="join_message" class="clearfix"></span>
+                    </span>
+                    
                 </form>
             </div>
         </div>
@@ -164,7 +225,35 @@ $ci = get_instance(); // CI_Loader instance
 <input type="hidden" id="destination_address" value="<?php echo $data['destination_address'] . '<br/>' . $data['destination_city'] . '<br/>' . $data['destination_state'] . '<br/>' . $data['destination_country']; ?>">
 
 <script>
+    
+    
     $ = jQuery.noConflict();
+    
+    $(document).ready(function(){
+        $('#totalSheets').change(function(){
+            var totalSheets = $(this).val();
+            var eventAmount = $('#eventAmount').val();
+            var tax = $('#tax').val();
+            totalEventAmount = (eventAmount * totalSheets);
+            taxAmount = totalEventAmount * (tax / 100);
+            totalAmount = totalEventAmount + taxAmount;
+            $('#totalAmount').val(totalAmount);
+            $('#totalAmountDiv').text('$'+totalAmount);
+        });
+        
+        $('#join_event').click(function(e){
+            e.preventDefault();
+            var login = $(this).attr('login');
+            if(login == 0){
+                $('#join_message').html('<label class="error">Please login to site to join an event.</label>');                
+            }
+            else{
+                $('#join_message').html('<label class="success">Please wait. Page will redirect to payment site.</label>');  
+            }
+        });
+    });
+    
+    
     function initMap() {
         var s_lat = $('#source_lat').val();
         var s_lgt = $('#source_lng').val();
@@ -207,7 +296,7 @@ $ci = get_instance(); // CI_Loader instance
                 content: destinationInfoBox
             });
         }
-        
+
         var markersArray = [];//some array
         source = new google.maps.LatLng(s_lat, s_lgt);
         marker = new google.maps.Marker({
