@@ -1,34 +1,37 @@
 <?php
 //echo "<pre/>"; print_r($data); exit;
 ?>       
-<div class="search-panel">
-    <form class="container" id="searchResultSearchForm" method="get" action="<?php echo site_url('events/search') ?>">
+<!--<div class="search-panel">
+    <form class="container" id="searchResultSearchForm" method="post" action="<?php echo site_url('events/search') ?>">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
                     <input type="text" name="search_term" class="form-control" value="<?php echo (isset($data['search_term'])) ? $data['search_term'] : ''; ?>" placeholder="Enter your destination">
                 </div>
             </div>
-
             <div class="col-sm-3">
                 <div class="form-group">
-                    <input type="text" id="datepicker1" value="<?php echo (isset($data['searchStartDate'])) ? $data['searchStartDate'] : ''; ?>" name="searchStartDate" class="form-control" placeholder="Date">
+                    <input type="text" id="datepicker" class="form-control" placeholder="Date">
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
-                    <input type="text" id="searchStartTime" value="<?php echo (isset($data['searchStartTime'])) ? $data['searchStartTime'] : ''; ?>" name="searchStartTime" class="form-control" placeholder="Start Time">
+                    <select class="custom-dropdown">
+                        <option>Duration</option>
+                        <option>Duration</option>
+                        <option>Duration</option>
+                    </select>
                 </div>
             </div>
             <div class="col-sm-2">
-                <input type="hidden" name="filter_duration" id="filter_duration" value="<?php echo (isset($data['filter_duration'])) ? $data['filter_duration'] : ''; ?>" />
-                <input type="hidden" name="filter_price" id="filter_price" value="<?php echo (isset($data['filter_price'])) ? $data['filter_price'] : ''; ?>" />
+                <input type="hidden" onchange="submitSearchForm('searchResultSearchForm')" name="filter_duration" id="filter_duration" value="<?php echo (isset($data['filter_duration'])) ? $data['filter_duration'] : '2'; ?>" />
+                <input type="hidden" onchange="submitSearchForm('searchResultSearchForm')" name="filter_price" id="filter_price" value="<?php echo (isset($data['filter_price'])) ? $data['filter_price'] : '2'; ?>" />
                 <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">					
                 <button type="submit" class="btn-secondary">Search</button>
             </div>
         </div>
     </form>
-</div>
+</div>-->
 
 <section class="main-content">
     <div class="container">
@@ -78,10 +81,10 @@
             <div class="col-md-9 col-sm-8">
                 <section class="wide-column shrinked">
                     <div class="top-panel clearfix">
-<!--                        <ul class="tags-outer pull-left">
+                        <ul class="tags-outer pull-left">
                             <li><span>Filter1 <a href="#" title="Remove" class="fa fa-close"></a></span></li>
                             <li><span>Filter2 <a href="#" title="Remove" class="fa fa-close"></a></span></li>
-                        </ul>-->
+                        </ul>
                         <div class="sort-dropdown pull-right">
                             <label>Sort by:</label>
                             <div class="form-group">
@@ -104,13 +107,9 @@
                                         <img src="images/destination01.jpg">
                                     </a>
                                 </div>
-                                <div class="col-md-9 col-sm-8">                                    
+                                <div class="col-md-9 col-sm-8">
                                     <div class="clearfix">
-                                        <h4 class="pull-left">
-                                            <a href="<?php echo base_url('events/index/'.$row['slug']);?>" title="<?php echo $row['title'] ?>">
-                                                <?php echo $row['title'] ?></a> 
-                                                <strong><?php echo '$' . $row['price'] ?></strong>
-                                        </h4>
+                                        <h4 class="pull-left"><a href="#" title="Pokemon go"><?php echo $row['title'] ?></a> <strong><?php echo '$' . $row['price'] ?></strong></h4>
                                         <div class="pull-right">
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
@@ -143,8 +142,7 @@
                             </div>
 
                         <?php }
-                    }
-                    ?>
+                    } ?>
 
                     #Other Results 
 
@@ -173,7 +171,7 @@
                                     <ul class="service-details">
                                         <li>
                                             <label>Primary location:</label>
-        <?php echo trim($row['source_address']); //.', '.$row['source_city'].', '.$row['source_state'].', '.$row['source_country']   ?>
+        <?php echo trim($row['source_address']); //.', '.$row['source_city'].', '.$row['source_state'].', '.$row['source_country']  ?>
                                         </li>
                                         <li>
                                             <label>Duration:</label>
@@ -194,8 +192,7 @@
                             </div>
 
                         <?php }
-                    } else {
-                        ?>
+                    } else { ?>
                         <h2>No result found, please try with other city!</h2>
 <?php } ?>
                     <div class="map-outer">

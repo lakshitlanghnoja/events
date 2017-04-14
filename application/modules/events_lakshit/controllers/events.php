@@ -18,7 +18,7 @@ class Events extends Base_Front_Controller {
         $this->theme->set_theme("events");
         $this->load->helper(array('url', 'cookie', 'captcha'));
         $this->load->library('form_validation');
-        $this->access_control($this->access_rules());
+        //$this->access_control($this->access_rules());
     }
 
     /**
@@ -31,7 +31,7 @@ class Events extends Base_Front_Controller {
                 'users' => array('*'),
             ),
             array(
-                'actions' => array('search'),
+                'actions' => array('joinevent'),
                 'users' => array('@'),
             )
         );
@@ -66,7 +66,7 @@ class Events extends Base_Front_Controller {
     public function joinevent() {
         if (!isset($this->session->userdata[$this->section_name]['user_id'])) {
             redirect("/");
-    }
+        }
         $postData = $this->input->post();
         $item_name = (isset($postData['item_name']) && $postData['item_name'] != '') ? $postData['item_name'] : '';
         $totalSheets = (isset($postData['total_sheet']) && $postData['total_sheet'] != '') ? $postData['total_sheet'] : 0;
@@ -190,13 +190,13 @@ class Events extends Base_Front_Controller {
 
     function search() {
 
-        if ($this->input->get()) {
-            $data = $this->input->get();
-            //echo "<pre/>"; print_r($data);exit;
+        if ($this->input->post()) {
+            $data = $this->input->post();
+            //echo "<pre/>"; print_r($data);
             // Search Term ***
             if (isset($data['search_term']) && !empty($data['search_term'])) {
                 $this->events_model->search_term = trim($data['search_term']);
-                $this->session->set_custom_userdata($this->section_name, "event_search_term", $this->input->get('search_term'));
+                $this->session->set_custom_userdata($this->section_name, "event_search_term", $this->input->post('search_term'));
             } else {
                 $this->session->set_custom_userdata($this->section_name, "event_search_term", "");
             }
@@ -204,27 +204,19 @@ class Events extends Base_Front_Controller {
             // Filter section
             if (isset($data['filter_duration']) && !empty($data['filter_duration'])) {
                 $this->events_model->filter_duration = trim($data['filter_duration']);
-                $this->session->set_custom_userdata($this->section_name, "filter_duration", $this->input->get('filter_duration'));
+                $this->session->set_custom_userdata($this->section_name, "filter_duration", $this->input->post('filter_duration'));
             } else {
                 $this->session->set_custom_userdata($this->section_name, "filter_duration", "");
             }
-            
-            if (isset($data['searchStartTime']) && !empty($data['searchStartTime'])) {
-                $this->events_model->searchStartTime = trim($data['searchStartTime']);
-                $this->session->set_custom_userdata($this->section_name, "searchStartTime", $this->input->get('searchStartTime'));
-            } else {
-                $this->session->set_custom_userdata($this->section_name, "searchStartTime", "");
-            }
-            
 
             if (isset($data['filter_price']) && !empty($data['filter_price'])) {
                 $this->events_model->filter_price = trim($data['filter_price']);
-                $this->session->set_custom_userdata($this->section_name, "filter_price", $this->input->get('filter_price'));
+                $this->session->set_custom_userdata($this->section_name, "filter_price", $this->input->post('filter_price'));
             } else {
                 $this->session->set_custom_userdata($this->section_name, "filter_price", "");
             }
 
-            	
+            //echo "<pre/>"; print_r($this->session->userdata);			
 
             $events = $this->events_model->get_search_result();
             if (count($events) > 0) {
@@ -236,14 +228,13 @@ class Events extends Base_Front_Controller {
         $this->events_model->search_term = '';
         $this->events_model->filter_duration = '';
         $this->events_model->filter_price = '';
-        $this->events_model->searchStartTime = '';
         $eventsOthers = $this->events_model->get_search_result();
         if (count($eventsOthers) > 0) {
             $data['eventsOthers'] = $eventsOthers;
         } else {
             $data['eventsOthers'] = array();
         }
-//echo "<pre/>"; print_r($data);exit;
+
         $this->theme->set('page_title', 'search-result');
         $this->theme->view($data, 'searchResult');
     }
@@ -253,71 +244,31 @@ class Events extends Base_Front_Controller {
         //echo "<pre/>"; print_r($this->input->post());
         //echo "<pre/>"; print_r($_FILES);
 
-        if ($this->input->post()) {            
-            if ($this->input->post('createEvent')) {
+        if ($this->input->post()) {
+            if (!empty($_FILES['galleryImages']['name'])) {
+                $filesCount = count($_FILES['galleryImages']['name']);
+                for ($i = 0; $i < $filesCount; $i++) {
+                    $_FILES['galleryImage']['name'] = round(microtime(true)) . '.' . end(explode(".", $_FILES['galleryImages']['name'][$i]));
+                    $_FILES['galleryImage']['type'] = $_FILES['galleryImages']['type'][$i];
+                    $_FILES['galleryImage']['tmp_name'] = $_FILES['galleryImages']['tmp_name'][$i];
+                    $_FILES['galleryImage']['error'] = $_FILES['galleryImages']['error'][$i];
+                    $_FILES['galleryImage']['size'] = $_FILES['galleryImages']['size'][$i];
 
-                $data_array = array();
-                $data = $this->input->post();
-                $data_array['title'] = trim(strip_tags($data['title']));
-                $data_array['slug'] = trim(strip_tags($data['title']));
-                $data_array['sheet'] = trim(strip_tags($data['seats']));
-                $data_array['source_address'] = strip_tags($data['sourceAddress']);
-                $data_array['source_city'] = trim(strip_tags($data['sourceCity']));
-                $data_array['source_state'] = trim(strip_tags($data['sourceState']));
-                $data_array['source_country'] = trim(strip_tags($data['sourceCountry']));
-                $data_array['source_lat'] = trim(strip_tags($data['SourceLat']));
-                $data_array['source_lng'] = trim(strip_tags($data['Sourcelong']));
-                $data_array['source_zipcode'] = trim(strip_tags($data['sourceZip']));
-                $data_array['destination_address'] = trim(strip_tags($data['destinationAddress']));
-                $data_array['destination_city'] = trim(strip_tags($data['destinationCity']));
-                $data_array['destination_state'] = trim(strip_tags($data['destinationState']));
-                $data_array['destination_country'] = trim(strip_tags($data['destinationCountry']));
-                $data_array['destination_lat'] = trim(strip_tags($data['destinationLat']));
-                $data_array['destination_lng'] = trim(strip_tags($data['destinationLong']));
-                $data_array['transportation'] = trim(strip_tags($data['transportation']));
-                $data_array['duration'] = $data['duration'];
-                $data_array['start_date'] = date('Y-m-d', strtotime($data['startDate']));
-                $data_array['start_time'] = strtotime($data['startTime']);
-                $data_array['price'] = $data['price'];
-                $data_array['user_id'] = trim(strip_tags($data['title']));
-                $data_array['about_event'] = trim(strip_tags($data['aboutEvent']));
-                $data_array['about_safety'] = trim(strip_tags($data['aboutSafety']));
-                $data_array['special_requirement'] = trim(strip_tags($data['specialRequirement']));
-                //echo "<pre/>"; print_r($data_array); 
-                
-                $event_id = $this->events_model->save_event($data_array);
-                $uploadData = array();
-                if (!empty($_FILES['galleryImages']['name'])) {
-                    $filesCount = count($_FILES['galleryImages']['name']);
-                    for ($i = 0; $i < $filesCount; $i++) {
-                        $_FILES['galleryImage']['name'] = round(microtime(true)) . '.' . end(explode(".", $_FILES['galleryImages']['name'][$i]));
-                        $_FILES['galleryImage']['type'] = $_FILES['galleryImages']['type'][$i];
-                        $_FILES['galleryImage']['tmp_name'] = $_FILES['galleryImages']['tmp_name'][$i];
-                        $_FILES['galleryImage']['error'] = $_FILES['galleryImages']['error'][$i];
-                        $_FILES['galleryImage']['size'] = $_FILES['galleryImages']['size'][$i];
+                    $uploadPath = 'themes/events/uploads';
+                    $config['upload_path'] = $uploadPath;
+                    $config['allowed_types'] = 'jpg|png';
 
-                        $uploadPath = 'themes/events/uploads';
-                        $config['upload_path'] = $uploadPath;
-                        $config['allowed_types'] = 'jpg|png';
-
-                        $this->load->library('upload', $config);
-                        $this->upload->initialize($config);
-                        if ($this->upload->do_upload('galleryImage')) {
-                            
-                            $fileData = $this->upload->data();
-                            $uploadData[] = array('event_id' => $event_id,'image' => $fileData['file_name'], 'display' => '0','status' => '1');
-                        }
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
+                    if ($this->upload->do_upload('galleryImage')) {
+                        echo "file juploading";
+                        $fileData = $this->upload->data();
+                        $uploadData[$i]['file_name'] = $fileData['file_name'];
                     }
                 }
             }
-            $id = $this->events_model->save_gallery($uploadData); 
-            if($id){
-                 $this->theme->message('Event has been created successfully!', 'error');
-            }else{
-                $this->theme->message('Something went wrong, please try again!', 'error'); 
-            }
-            
-            redirect('events/create');
+
+            $data = $this->input->post();
             //echo "<pre/>"; print_r($uploadData);
             //echo "<pre/>"; print_r($_FILES['galleryImages']['name']);exit;
         }

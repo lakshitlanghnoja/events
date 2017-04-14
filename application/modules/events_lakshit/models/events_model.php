@@ -21,7 +21,6 @@ class Events_model extends Base_Model {
     public $search_term = "";
     public $filter_price = "";
     public $filter_duration = "";
-    public $searchStartTime = "";
     public $sort_order = "";
     public $_record_count;
 
@@ -296,13 +295,6 @@ class Events_model extends Base_Model {
             //$this->db->order_by($this->sort_by, $this->sort_order);
             $this->db->where("duration BETWEEN 0 AND $this->filter_duration");
         }
-        if ($this->searchStartTime != "") {
-            //echo $this->searchStartTime; 
-            $searchStartTime = strtotime($this->searchStartTime);
-            //echo $searchStartTime; exit;
-            //$this->db->order_by($this->sort_by, $this->sort_order);
-            $this->db->where("start_time =  '$searchStartTime'");
-        }
 
         if ($this->filter_price != "") {
             //$this->db->order_by($this->sort_by, $this->sort_order);
@@ -326,43 +318,6 @@ class Events_model extends Base_Model {
         $this->db->where_in('id', $id);
         $this->db->set('status', '-1');
         return $this->db->update($this->_tbl_users);
-    }
-
-    /**
-     * Function save_user to add/update user
-     * @param array $data for user table
-     * @param array $data_profile for user_profile table
-     */
-    public function save_event($data) {
-        $id = 0;
-
-        /*
-          if (isset($user_data['id']) && $user_data['id'] != 0 && $user_data['id'] != "") {
-          $this->db->where('id', $user_data['id']);
-          $this->db->update($this->_tbl_users, $user_data);
-          $id = $user_data['id'];
-          }
-          else {
-         */
-        $this->db->set('created', 'NOW()', FALSE);
-        $this->db->set('modified', 'NOW()', FALSE);
-        $this->db->set('status', 1, FALSE);
-        if ($this->db->insert($this->_tbl_events, $data)) {
-            $id = $this->db->insert_id();
-        }
-        // }
-        return $id;
-    }
-
-    public function save_gallery($data) {
-        $id = 0;
-        if (count($data) > 0) {
-            foreach($data as $row)
-            if ($this->db->insert('event_gallery', $row)) {
-                $id = $this->db->insert_id();
-            }
-        }
-        return $id;
     }
 
 }

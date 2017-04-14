@@ -238,6 +238,103 @@ $(document).ready(function () {
         }
     });
 
+
+    $("#eventForm").validate({
+        rules: {
+            title: {
+                required: true,
+                noSpace: true
+            },
+            startDate: {
+                required: true,
+                noSpace: true,
+                date: true
+            },
+            sourceAddress: {
+                required: true,
+                noSpace: true
+            },
+            destinationAddress: {
+                required: true,
+                noSpace: true,
+            },
+            aboutEvent: {
+                required: true,
+                noSpace: true,
+            },
+            aboutSafety: {
+                required: true,
+                noSpace: true,
+            },
+            specialRequirement: {
+                required: true,
+                noSpace: true,
+            },
+            transportation: {
+                required: true,
+            },
+        },
+        messages: {
+            title: {
+                required: "Please enter title",
+                noSpace: "Please enter valid title"
+            },
+            startDate: {
+                required: "Please enter date",
+                noSpace: "Please enter valid data",
+                date: "Plese enter valid date in mm/dd/yyyy formate"
+            },
+            sourceAddress: {
+                required: "Please enter source address",
+                noSpace: "Please enter valid source address",
+            },
+            destinationAddress: {
+                required: "Please enter destination address",
+                noSpace: "Please enter valid destination address"
+            },
+            aboutEvent: {
+                required: "Please write about event",
+            },
+            aboutSafety: {
+                required: "Please write about safety",
+            },
+            specialRequirement: {
+                required: "Please write about special requirement",
+            },
+            transportation: {
+                required: "Please select transportation",
+            }
+        },
+        errorPlacement: function (error, element) {
+            element.after(error);
+        }
+    });
+
+    $('#createEventSubmit').click(function (e) {
+        //e.preventDefault();
+        $("#source_address").find("input[type=text]").each(function () {
+            console.log(this.id);
+            if (this.id != 'searchSourceAddress') {
+                $('#hidden' + this.id).val($('#' + this.id).val());
+            }
+        });
+
+        $("#destination_address").find("input[type=text]").each(function () {
+            console.log(this.id);
+            if (this.id != 'searchDestinationAddress') {
+                $('#hidden' + this.id).val($('#' + this.id).val());
+            }
+        });
+        
+        if ($("#eventForm").valid()) {
+            alert('valid');
+            return true;
+        } else {
+            alert('in valid');
+            return false;
+        }
+    });
+    
     $('#register_submit').click(function (e) {
         e.preventDefault();
         if ($("#registrationForm").valid()) {

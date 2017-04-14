@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 14, 2017 at 05:24 PM
+-- Generation Time: Apr 14, 2017 at 06:08 PM
 -- Server version: 5.5.8
 -- PHP Version: 5.3.5
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `activity_log` (
   `ip_address` varchar(50) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2099 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2117 ;
 
 --
 -- Dumping data for table `activity_log`
@@ -2142,7 +2142,25 @@ INSERT INTO `activity_log` (`id`, `user_id`, `session_id`, `url`, `ip_address`, 
 (2095, 1, 'dc470b1ece2fdd30803a0e37b394c024', 'http://localhost/tture/', '127.0.0.1', '2017-04-14 03:02:32'),
 (2096, 1, 'dc470b1ece2fdd30803a0e37b394c024', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 03:02:34'),
 (2097, 0, 'abf5a6d46ca88d7710aacca740ea5d43', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 08:30:38'),
-(2098, 0, 'abf5a6d46ca88d7710aacca740ea5d43', 'http://localhost/tture/users/login', '127.0.0.1', '2017-04-14 08:30:38');
+(2098, 0, 'abf5a6d46ca88d7710aacca740ea5d43', 'http://localhost/tture/users/login', '127.0.0.1', '2017-04-14 08:30:38'),
+(2099, 0, '15858ba0a3f07863661c691c90ff6b54', 'http://localhost/tture/events/index/event1', '127.0.0.1', '2017-04-14 22:57:39'),
+(2100, 0, '15858ba0a3f07863661c691c90ff6b54', 'http://localhost/tture/events/index/asSA', '127.0.0.1', '2017-04-14 22:57:47'),
+(2101, 0, '15858ba0a3f07863661c691c90ff6b54', 'http://localhost/tture/', '127.0.0.1', '2017-04-14 22:58:15'),
+(2102, 0, '275f581c9b3dd838f591252ef986d604', 'http://localhost/tture/users/ajax_login', '127.0.0.1', '2017-04-14 23:24:04'),
+(2103, 1, '275f581c9b3dd838f591252ef986d604', 'http://localhost/tture/', '127.0.0.1', '2017-04-14 23:24:04'),
+(2104, 1, '275f581c9b3dd838f591252ef986d604', 'http://localhost/tture/events/search?search_term=ahme&searchStartDate=&searchStartTime=&tture_token=665a269e57c5f48df100dd4d8778d04f', '127.0.0.1', '2017-04-14 23:24:15'),
+(2105, 1, '275f581c9b3dd838f591252ef986d604', 'http://localhost/tture/events/search?search_term=ahme&searchStartDate=&searchStartTime=&tture_token=665a269e57c5f48df100dd4d8778d04f', '127.0.0.1', '2017-04-14 23:26:08'),
+(2106, 1, '275f581c9b3dd838f591252ef986d604', 'http://localhost/tture/events/search?search_term=ahme&searchStartDate=&searchStartTime=&tture_token=665a269e57c5f48df100dd4d8778d04f', '127.0.0.1', '2017-04-14 23:28:11'),
+(2107, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/events/search?search_term=ahme&searchStartDate=&searchStartTime=&tture_token=665a269e57c5f48df100dd4d8778d04f', '127.0.0.1', '2017-04-14 23:30:03'),
+(2108, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/events/index/event1', '127.0.0.1', '2017-04-14 23:30:06'),
+(2109, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/events/event1', '127.0.0.1', '2017-04-14 23:30:25'),
+(2110, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/home_page/index', '127.0.0.1', '2017-04-14 23:30:25'),
+(2111, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 23:30:45'),
+(2112, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 23:32:45'),
+(2113, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 23:33:08'),
+(2114, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 23:33:56'),
+(2115, 1, 'c2e0dff3bee2c5e8378ade2f9474248c', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 23:35:02'),
+(2116, 1, '742fc1e073d05b5b0a6cee77e53554bf', 'http://localhost/tture/users/profile', '127.0.0.1', '2017-04-14 23:35:26');
 
 -- --------------------------------------------------------
 
@@ -2168,6 +2186,8 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 --
 
 INSERT INTO `ci_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`, `previous_id`, `last_rotate`, `last_write`) VALUES
+('15858ba0a3f07863661c691c90ff6b54', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', 1492190859, 'a:2:{s:9:"user_data";s:0:"";s:5:"front";a:5:{s:12:"site_lang_id";s:1:"1";s:14:"site_lang_name";s:7:"english";s:14:"site_lang_code";s:2:"en";s:14:"site_direction";s:3:"ltr";s:15:"record_per_page";s:1:"5";}}', NULL, '', ''),
+('742fc1e073d05b5b0a6cee77e53554bf', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', 1492193126, 'a:2:{s:9:"user_data";s:0:"";s:5:"front";a:17:{s:12:"site_lang_id";s:1:"1";s:14:"site_lang_name";s:7:"english";s:14:"site_lang_code";s:2:"en";s:14:"site_direction";s:3:"ltr";s:15:"record_per_page";s:1:"5";s:11:"permissions";a:55:{i:0;s:17:"admin.users.login";i:1;s:17:"admin.users.index";i:2;s:22:"admin.users.action.add";i:3;s:23:"admin.users.action.edit";i:4;s:23:"admin.permissions.index";i:5;s:28:"admin.permissions.action.add";i:6;s:18:"admin.users.delete";i:7;s:29:"admin.permissions.action.edit";i:8;s:24:"admin.permissions.delete";i:9;s:17:"admin.roles.index";i:10;s:22:"admin.roles.action.add";i:11;s:23:"admin.roles.action.edit";i:12;s:25:"admin.roles.action.delete";i:13;s:29:"admin.roles.permission_matrix";i:14;s:16:"admin.urls.index";i:15;s:21:"admin.urls.action.add";i:16;s:22:"admin.urls.action.edit";i:17;s:17:"admin.urls.delete";i:18;s:22:"front.contact_us.index";i:19;s:15:"admin.cms.index";i:20;s:20:"admin.cms.ajax_index";i:21;s:16:"admin.cms.action";i:22;s:21:"admin.cms.ajax_action";i:23;s:16:"admin.menu.index";i:24;s:21:"admin.menu.action.add";i:25;s:22:"admin.menu.action.edit";i:26;s:17:"admin.menu.delete";i:27;s:21:"admin.languages.index";i:28;s:26:"admin.languages.action.add";i:29;s:27:"admin.languages.action.edit";i:30;s:20:"admin.settings.index";i:31;s:25:"admin.settings.action.add";i:32;s:26:"admin.settings.action.edit";i:33;s:21:"admin.settings.delete";i:34;s:16:"admin.users.save";i:35;s:16:"admin.cms.delete";i:36;s:27:"front.users.change_password";i:37;s:22:"admin.permissions.save";i:38;s:15:"admin.urls.save";i:39;s:36:"admin.roles.update_matrix_permission";i:40;s:15:"admin.menu.save";i:41;s:20:"admin.languages.save";i:42;s:22:"admin.languages.delete";i:43;s:21:"admin.users.view_data";i:44;s:34:"admin.roles.update_user_permission";i:45;s:23:"admin.menu.get_menulist";i:46;s:23:"admin.menu.get_subpages";i:47;s:34:"admin.roles.user_permission_matrix";i:48;s:18:"admin.users.action";i:49;s:14:"admin.cms.view";i:50;s:35:"admin.modulebuilder.generate_module";i:51;s:16:"admin.roles.save";i:52;s:19:"admin.settings.save";i:53;s:5:"event";i:54;s:10:"event join";}s:7:"user_id";s:1:"1";s:7:"role_id";s:1:"1";s:5:"email";s:15:"admin@tture.com";s:9:"firstname";s:5:"Admin";s:8:"lastname";s:4:"User";s:12:"profileImage";s:11:"dummy_1.jpg";s:9:"logged_in";b:1;s:17:"event_search_term";s:4:"ahme";s:15:"filter_duration";s:0:"";s:15:"searchStartTime";s:0:"";s:12:"filter_price";s:0:"";}}', NULL, '', ''),
 ('9a09790a3b73cf7ca3f0d9f239b73ac7', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', 1492116340, 'a:3:{s:9:"user_data";s:0:"";s:12:"profileImage";s:18:"default_pic_12.jpg";s:5:"front";a:13:{s:12:"site_lang_id";s:1:"1";s:14:"site_lang_name";s:7:"english";s:14:"site_lang_code";s:2:"en";s:14:"site_direction";s:3:"ltr";s:15:"record_per_page";s:1:"5";s:11:"permissions";a:55:{i:0;s:17:"admin.users.login";i:1;s:17:"admin.users.index";i:2;s:22:"admin.users.action.add";i:3;s:23:"admin.users.action.edit";i:4;s:23:"admin.permissions.index";i:5;s:28:"admin.permissions.action.add";i:6;s:18:"admin.users.delete";i:7;s:29:"admin.permissions.action.edit";i:8;s:24:"admin.permissions.delete";i:9;s:17:"admin.roles.index";i:10;s:22:"admin.roles.action.add";i:11;s:23:"admin.roles.action.edit";i:12;s:25:"admin.roles.action.delete";i:13;s:29:"admin.roles.permission_matrix";i:14;s:16:"admin.urls.index";i:15;s:21:"admin.urls.action.add";i:16;s:22:"admin.urls.action.edit";i:17;s:17:"admin.urls.delete";i:18;s:22:"front.contact_us.index";i:19;s:15:"admin.cms.index";i:20;s:20:"admin.cms.ajax_index";i:21;s:16:"admin.cms.action";i:22;s:21:"admin.cms.ajax_action";i:23;s:16:"admin.menu.index";i:24;s:21:"admin.menu.action.add";i:25;s:22:"admin.menu.action.edit";i:26;s:17:"admin.menu.delete";i:27;s:21:"admin.languages.index";i:28;s:26:"admin.languages.action.add";i:29;s:27:"admin.languages.action.edit";i:30;s:20:"admin.settings.index";i:31;s:25:"admin.settings.action.add";i:32;s:26:"admin.settings.action.edit";i:33;s:21:"admin.settings.delete";i:34;s:16:"admin.users.save";i:35;s:16:"admin.cms.delete";i:36;s:27:"front.users.change_password";i:37;s:22:"admin.permissions.save";i:38;s:15:"admin.urls.save";i:39;s:36:"admin.roles.update_matrix_permission";i:40;s:15:"admin.menu.save";i:41;s:20:"admin.languages.save";i:42;s:22:"admin.languages.delete";i:43;s:21:"admin.users.view_data";i:44;s:34:"admin.roles.update_user_permission";i:45;s:23:"admin.menu.get_menulist";i:46;s:23:"admin.menu.get_subpages";i:47;s:34:"admin.roles.user_permission_matrix";i:48;s:18:"admin.users.action";i:49;s:14:"admin.cms.view";i:50;s:35:"admin.modulebuilder.generate_module";i:51;s:16:"admin.roles.save";i:52;s:19:"admin.settings.save";i:53;s:5:"event";i:54;s:10:"event join";}s:7:"user_id";s:1:"1";s:7:"role_id";s:1:"1";s:5:"email";s:15:"admin@tture.com";s:9:"firstname";s:5:"Admin";s:8:"lastname";s:4:"User";s:12:"profileImage";s:11:"dummy_1.jpg";s:9:"logged_in";b:1;}}', NULL, '', ''),
 ('abf5a6d46ca88d7710aacca740ea5d43', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', 1492138838, 'a:4:{s:9:"user_data";s:0:"";s:5:"front";a:5:{s:12:"site_lang_id";s:1:"1";s:14:"site_lang_name";s:7:"english";s:14:"site_lang_code";s:2:"en";s:14:"site_direction";s:3:"ltr";s:15:"record_per_page";s:1:"5";}s:17:"flash:old:message";s:48:"info::You have to login for editing the profile.";s:17:"flash:new:message";s:0:"";}', NULL, '', ''),
 ('dc470b1ece2fdd30803a0e37b394c024', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', 1492119149, 'a:2:{s:9:"user_data";s:0:"";s:5:"front";a:16:{s:12:"site_lang_id";s:1:"1";s:14:"site_lang_name";s:7:"english";s:14:"site_lang_code";s:2:"en";s:14:"site_direction";s:3:"ltr";s:15:"record_per_page";s:1:"5";s:11:"permissions";a:55:{i:0;s:17:"admin.users.login";i:1;s:17:"admin.users.index";i:2;s:22:"admin.users.action.add";i:3;s:23:"admin.users.action.edit";i:4;s:23:"admin.permissions.index";i:5;s:28:"admin.permissions.action.add";i:6;s:18:"admin.users.delete";i:7;s:29:"admin.permissions.action.edit";i:8;s:24:"admin.permissions.delete";i:9;s:17:"admin.roles.index";i:10;s:22:"admin.roles.action.add";i:11;s:23:"admin.roles.action.edit";i:12;s:25:"admin.roles.action.delete";i:13;s:29:"admin.roles.permission_matrix";i:14;s:16:"admin.urls.index";i:15;s:21:"admin.urls.action.add";i:16;s:22:"admin.urls.action.edit";i:17;s:17:"admin.urls.delete";i:18;s:22:"front.contact_us.index";i:19;s:15:"admin.cms.index";i:20;s:20:"admin.cms.ajax_index";i:21;s:16:"admin.cms.action";i:22;s:21:"admin.cms.ajax_action";i:23;s:16:"admin.menu.index";i:24;s:21:"admin.menu.action.add";i:25;s:22:"admin.menu.action.edit";i:26;s:17:"admin.menu.delete";i:27;s:21:"admin.languages.index";i:28;s:26:"admin.languages.action.add";i:29;s:27:"admin.languages.action.edit";i:30;s:20:"admin.settings.index";i:31;s:25:"admin.settings.action.add";i:32;s:26:"admin.settings.action.edit";i:33;s:21:"admin.settings.delete";i:34;s:16:"admin.users.save";i:35;s:16:"admin.cms.delete";i:36;s:27:"front.users.change_password";i:37;s:22:"admin.permissions.save";i:38;s:15:"admin.urls.save";i:39;s:36:"admin.roles.update_matrix_permission";i:40;s:15:"admin.menu.save";i:41;s:20:"admin.languages.save";i:42;s:22:"admin.languages.delete";i:43;s:21:"admin.users.view_data";i:44;s:34:"admin.roles.update_user_permission";i:45;s:23:"admin.menu.get_menulist";i:46;s:23:"admin.menu.get_subpages";i:47;s:34:"admin.roles.user_permission_matrix";i:48;s:18:"admin.users.action";i:49;s:14:"admin.cms.view";i:50;s:35:"admin.modulebuilder.generate_module";i:51;s:16:"admin.roles.save";i:52;s:19:"admin.settings.save";i:53;s:5:"event";i:54;s:10:"event join";}s:7:"email_w";s:15:"admin@tture.com";s:10:"password_w";s:5:"admin";s:5:"Login";s:5:"Login";s:7:"user_id";s:1:"1";s:7:"role_id";s:1:"1";s:5:"email";s:15:"admin@tture.com";s:9:"firstname";s:5:"Admin";s:8:"lastname";s:4:"User";s:12:"profileImage";s:11:"dummy_1.jpg";s:9:"logged_in";b:1;}}', NULL, '', '');
@@ -2300,6 +2320,63 @@ CREATE TABLE IF NOT EXISTS `events` (
   `source_city` varchar(255) NOT NULL,
   `source_state` varchar(255) NOT NULL,
   `source_country` varchar(255) NOT NULL,
+  `source_lat` decimal(5,2) NOT NULL,
+  `source_lng` decimal(5,2) NOT NULL,
+  `source_zipcode` varchar(255) NOT NULL,
+  `destination_address` text NOT NULL,
+  `destination_city` varchar(255) NOT NULL,
+  `destination_state` varchar(255) NOT NULL,
+  `destination_country` varchar(255) NOT NULL,
+  `destination_lat` decimal(5,2) NOT NULL,
+  `destination_lng` decimal(5,2) NOT NULL,
+  `transportation` enum('self','pickup','pickup_drop') NOT NULL,
+  `duration` int(10) NOT NULL,
+  `start_date` datetime NOT NULL,
+  `start_time` varchar(100) NOT NULL,
+  `price` int(20) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `about_event` text NOT NULL,
+  `about_safety` text NOT NULL,
+  `special_requirement` text NOT NULL,
+  `display_image` varchar(255) NOT NULL,
+  `gallery_images` varchar(1000) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `title`, `slug`, `sheet`, `source_address`, `source_city`, `source_state`, `source_country`, `source_lat`, `source_lng`, `source_zipcode`, `destination_address`, `destination_city`, `destination_state`, `destination_country`, `destination_lat`, `destination_lng`, `transportation`, `duration`, `start_date`, `start_time`, `price`, `user_id`, `about_event`, `about_safety`, `special_requirement`, `display_image`, `gallery_images`, `status`, `created`, `modified`) VALUES
+(1, 'event1', 'event1', 5, 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', '382481', 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', 'self', 20, '2017-03-25 21:47:35', '0000-00-00 00:00:00', 10, 1, 'THis is some description', '', '', 'test.jpg', 'test1.jpg', 1, '2017-03-25 21:48:23', '2017-03-25 21:48:26'),
+(2, 'event2', 'event2', 10, 'infocity, ', 'gandhinagar', 'gujarat', 'india', '39.23', '62.11', '382481', 'chandlodia ahmedabad', 'gandhinagar', 'gujarat', 'india', '39.23', '62.11', 'pickup', 20, '2017-04-01 21:47:35', '0000-00-00 00:00:00', 31, 1, 'this is desciotion', '', '', 'test.jpg', 'test1.jpg', 1, '2017-04-01 10:03:10', '2017-04-01 10:03:14'),
+(3, 'event3', 'event3', 5, 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', '382481', 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', 'self', 15, '2017-03-25 21:47:35', '0000-00-00 00:00:00', 7, 1, 'THis is some description', '', '', 'test.jpg', 'test1.jpg', 1, '2017-03-25 21:48:23', '2017-03-25 21:48:26'),
+(4, 'event4', 'event4', 10, 'infocity, ', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', '382481', 'chandlodia ahmedabad', 'gandhinagar', 'gujarat', 'india', '39.23', '62.11', 'pickup', 25, '2017-04-01 21:47:35', '0000-00-00 00:00:00', 17, 1, 'this is desciotion', '', '', 'test.jpg', 'test1.jpg', 1, '2017-04-01 10:03:10', '2017-04-01 10:03:14'),
+(7, 'title of event', 'title of event', 12, 'Chandlodiya, Ahmedabad, Gujarat 380081, India', 'Ahmedabad', 'Gujarat', 'India', '72.00', '55.00', '380081', 'Spring Valley, Mumatpura, Ahmedabad, Gujarat 380054, India', 'Ahmedabad', 'Gujarat', 'India', '23.02', '72.51', 'pickup', 9, '2017-04-11 00:00:00', '0000-00-00 00:00:00', 5, 0, 'about event', 'about safety', 'special requirement', '', '', 1, '2017-04-11 22:10:42', '2017-04-11 22:10:42'),
+(18, 'sdsfds', 'sdsfds', 1, 'Chandlodia Rd, Sector 45c, Akhbar Nagar, Nava Vadaj, Ahmedabad, Gujarat 380061, India', 'Ahmedabad', 'Gujarat', 'India', '23.07', '72.56', '380061', 'Asansol, West Bengal, India', 'Asansol', 'West Bengal', 'India', '23.67', '86.95', 'self', 1, '2017-04-08 00:00:00', '0000-00-00 00:00:00', 1, 0, 'dsasas', 'sdadad', 'asas', '', '', 1, '2017-04-12 21:22:47', '2017-04-12 21:22:47'),
+(19, 'asdfdsf', 'asdfdsf', 1, 'Chandkheda, Ahmedabad, Gujarat, India', 'Ahmedabad', 'Gujarat', 'India', '23.11', '72.57', '', 'Near Wide Angle, Opposite Karnavati Club, Sarkhej - Gandhinagar Highway, Ramdev Nagar, Ahmedabad, Gujarat 380015, India', 'Ahmedabad', 'Gujarat', 'India', '23.02', '72.51', 'self', 5, '2017-04-08 00:00:00', '0000-00-00 00:00:00', 5, 0, 'sazd', 'adasdasd', 'asda', '', '', 1, '2017-04-12 21:23:55', '2017-04-12 21:23:55'),
+(20, 'last', 'last', 11, 'Chandlodia Rd, Sector 45c, Akhbar Nagar, Nava Vadaj, Ahmedabad, Gujarat 380061, India', 'Ahmedabad', 'Gujarat', 'India', '23.07', '72.56', '380061', 'Karanwas, Uttar Pradesh 203393, India', 'Karanwas', 'Uttar Pradesh', 'India', '28.27', '78.32', 'self', 3, '2017-01-01 00:00:00', '0000-00-00 00:00:00', 5, 0, 'fdsfasa', 'adfasdfa', 'dfasdfs', '', '', 1, '2017-04-14 01:34:11', '2017-04-14 01:34:11'),
+(21, 'asSA', 'asSA', 3, 'Chandlodia Talav, Gayatri Nagar, Chandlodiya, Ahmedabad, Gujarat 380081', 'Ahmedabad', 'Gujarat', 'India', '23.08', '72.55', '380081', 'Spring Valley, Mumatpura, Ahmedabad, Gujarat 380054, India', 'Ahmedabad', 'Gujarat', 'India', '23.02', '72.51', 'self', 3, '2017-01-01 00:00:00', '1492153440', 8, 0, 'sadfasdf', 'asdfsdfadsf', 'dsafsdas', '', '', 1, '2017-04-14 01:41:32', '2017-04-14 01:41:32'),
+(22, 'another', 'another', 5, 'Chandkheda, Ahmedabad, Gujarat, India', 'Ahmedabad', 'Gujarat', 'India', '23.11', '72.57', '', 'Spring Valley, Mumatpura, Ahmedabad, Gujarat 380054, India', 'Ahmedabad', 'Gujarat', 'India', '23.02', '72.51', 'self', 5, '2017-04-30 00:00:00', '1492154100', 8, 0, 'saa', 'sasas', 'asdasa', '', '', 1, '2017-04-14 01:59:51', '2017-04-14 01:59:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `events_bkp`
+--
+
+CREATE TABLE IF NOT EXISTS `events_bkp` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(500) NOT NULL,
+  `sheet` int(11) NOT NULL,
+  `source_address` text NOT NULL,
+  `source_city` varchar(255) NOT NULL,
+  `source_state` varchar(255) NOT NULL,
+  `source_country` varchar(255) NOT NULL,
   `source_lat` varchar(255) NOT NULL,
   `source_lng` varchar(255) NOT NULL,
   `source_zipcode` varchar(255) NOT NULL,
@@ -2324,10 +2401,10 @@ CREATE TABLE IF NOT EXISTS `events` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `events`
+-- Dumping data for table `events_bkp`
 --
 
-INSERT INTO `events` (`id`, `title`, `slug`, `sheet`, `source_address`, `source_city`, `source_state`, `source_country`, `source_lat`, `source_lng`, `source_zipcode`, `destination_address`, `destination_city`, `destination_state`, `destination_country`, `destination_lat`, `destination_lng`, `transportation`, `duration`, `start_date`, `price`, `user_id`, `about_event`, `display_image`, `gallery_images`, `status`, `created`, `modified`) VALUES
+INSERT INTO `events_bkp` (`id`, `title`, `slug`, `sheet`, `source_address`, `source_city`, `source_state`, `source_country`, `source_lat`, `source_lng`, `source_zipcode`, `destination_address`, `destination_city`, `destination_state`, `destination_country`, `destination_lat`, `destination_lng`, `transportation`, `duration`, `start_date`, `price`, `user_id`, `about_event`, `display_image`, `gallery_images`, `status`, `created`, `modified`) VALUES
 (1, 'event1', 'event1', 5, 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', '382481', 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', 'self', 20, '2017-03-25 21:47:35', 10, 1, 'THis is some description', 'test.jpg', 'test.jpg', 1, '2017-03-25 21:48:23', '2017-03-25 21:48:26'),
 (2, 'event2', 'event2', 10, 'infocity, ', 'gandhinagar', 'gujarat', 'india', '39.23', '62.11', '382481', 'chandlodia ahmedabad', 'gandhinagar', 'gujarat', 'india', '39.23', '62.11', 'pickup', 20, '2017-04-01 21:47:35', 100, 1, 'this is desciotion', 'test.jpg', 'test1.jpg', 1, '2017-04-01 10:03:10', '2017-04-01 10:03:14'),
 (3, 'event3', 'event3', 5, 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', '382481', 'chandlodia, ahmedabad', 'ahmedabad', 'gujarat', 'india', '39.23', '62.11', 'self', 15, '2017-03-25 21:47:35', 7, 1, 'THis is some description', 'test.jpg', 'test1.jpg', 1, '2017-03-25 21:48:23', '2017-03-25 21:48:26'),

@@ -41,7 +41,7 @@ $CI = & get_instance();
         </div>
         <div id="parentVerticalTab" class="clearfix vertical-tabs">
             <ul class="resp-tabs-list hor_1">
-                <li>Create Event</li>
+<!--                <li>Create Event</li>-->
                 <li>Edit Profile</li>
                 <li>Account Details</li>
                 <li>Review by you</li>
@@ -51,9 +51,9 @@ $CI = & get_instance();
                 <li>FAQ</li>
             </ul>
             <div class="resp-tabs-container hor_1">
-                <div>
-                    <?php include('create_event.php'); ?>                            
-                </div>
+<!--                <div>
+                    <?php //include('create_event.php'); ?>                            
+                </div>-->
                 <div>
                     <?php include('edit_profile.php'); ?>                            
                 </div>
