@@ -70,8 +70,6 @@ class Users_admin extends Base_Admin_Controller {
                 $this->session->set_custom_userdata($this->section_name, "user_search_term", "");
             }
             // Search Term ***
-
-
             // Sort Order ***
             if (isset($data['sort_by']) && $data['sort_order']) {
                 $this->users_model->sort_by = $data['sort_by'];
@@ -211,7 +209,7 @@ class Users_admin extends Base_Admin_Controller {
             $data['back_url'] = $this->input->get('back_url');
         }
         if ($this->is_login()) {
-            redirect($this->section_name.'/users/index');
+            redirect($this->section_name . '/users/index');
             exit;
         }
         $loginuserdata = $this->session->all_userdata();
@@ -339,6 +337,16 @@ class Users_admin extends Base_Admin_Controller {
             $status = "";
             $role_id = "";
 
+            $profile_image = '';
+            $profile_image_varified = '';
+            $phone_number = '';
+            $govt_id_proof = "";
+            $social_media_link = "";
+            $is_email_varified = 0;
+            $is_social_media_link_varified = 0;
+            $govt_id_proof_varified = 0;
+            $phone_varified = 0;
+
             //Logic
             switch ($action) {
                 case 'add':
@@ -347,14 +355,14 @@ class Users_admin extends Base_Admin_Controller {
                     break;
                 case 'edit':
                     // Check for existing user ***
-                    /*$this->db->where("id", $id);
-                    $this->db->where("status", 1);
-                    $user_exist = $this->db->get(TBL_USERS);
+                    /* $this->db->where("id", $id);
+                      $this->db->where("status", 1);
+                      $user_exist = $this->db->get(TBL_USERS);
 
-                    if (intval($user_exist->num_rows()) < 1) {
-                        $this->theme->set_message(lang('user-not-exist'), 'error');
-                        redirect($this->section_name . '/users');
-                    } */
+                      if (intval($user_exist->num_rows()) < 1) {
+                      $this->theme->set_message(lang('user-not-exist'), 'error');
+                      redirect($this->section_name . '/users');
+                      } */
                     // Check for existing user ***
                     //Get user info by id
                     if ($id == 1 && $this->session->userdata[$this->section_name]['user_id'] != 1) {
@@ -376,12 +384,22 @@ class Users_admin extends Base_Admin_Controller {
                         $role_id = $result['role_id'];
                         $role_list = $this->users_model->role_list();
 
+                        $profile_image = $result['profile_image'];
+                        $profile_image_varified = $result['profile_image_varified'];
+                        $phone_number = $result['mobile_number'];
+                        $govt_id_proof = $result['government_id_proof'];
+                        $social_media_link = $result['social_media_link'];
+                        $is_email_varified = $result['email_varified'];
+                        $is_social_media_link_varified = $result['social_media_varified'];
+                        $govt_id_proof_varified = $result['government_id_varified'];
+                        $phone_varified = $result['phone_varified'];
+
                         // lock record by passing ci object, table name and table id
-                        /*$flag = lock_record($this, TBL_USERS, $id, $result['lock_user_id']);
-                        if (!$flag) {
-                            $this->theme->set_message(lang('record-already-locked'), 'error');
-                            redirect($this->section_name . '/users');
-                        }*/
+                        /* $flag = lock_record($this, TBL_USERS, $id, $result['lock_user_id']);
+                          if (!$flag) {
+                          $this->theme->set_message(lang('record-already-locked'), 'error');
+                          redirect($this->section_name . '/users');
+                          } */
                         // end
                     } else {
                         //If user not exist then redirecting to listing page
@@ -405,6 +423,16 @@ class Users_admin extends Base_Admin_Controller {
             $data['status'] = $status;
             $data['role_id'] = $role_id;
             $data['role_list'] = $role_list;
+            
+            $data['profile_image'] = $profile_image;
+            $data['profile_image_varified'] = $profile_image_varified;
+            $data['mobile_number'] = $phone_number;
+            $data['government_id_proof'] = $govt_id_proof;
+            $data['social_media_link'] = $social_media_link;            
+            $data['email_varified'] = $is_email_varified;
+            $data['social_media_varified'] = $is_social_media_link_varified;
+            $data['government_id_varified'] = $govt_id_proof_varified;
+            $data['phone_varified'] = $phone_varified;
 
             //create breadcrumbs & page-title
             if ($action == 'add') {
@@ -478,6 +506,14 @@ class Users_admin extends Base_Admin_Controller {
                 } elseif ($password != '' && $passconf != '') {
                     $data_array['password'] = encriptsha1($password);
                 }
+                
+                $data_array['email_varified'] = $data['email_varified'];
+                $data_array['profile_image_varified'] = $data['profile_image_varified'];
+                $data_array['government_id_varified'] = $data['government_id_varified'];
+                $data_array['phone_varified'] = $data['phone_varified'];
+                $data_array['social_media_varified'] = $data['social_media_varified'];
+                
+                
                 $data_array['role_id'] = $role_id;
                 $data_array['status'] = $status;
 
@@ -599,4 +635,3 @@ class Users_admin extends Base_Admin_Controller {
     }
 
 }
-

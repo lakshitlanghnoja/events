@@ -4,17 +4,19 @@
 /*settings for captcha */
  define('CAPTCHA_SETTING','1');
 /*contact us email id */
- define('CONTACT_US_EMAIL','vipul.bhoraniya@etatvasoft.com');
+ define('CONTACT_US_EMAIL','contactus@tture.com');
 /*from email address */
- define('SITE_FROM_EMAIL','info@cidemo.in');
+ define('SITE_FROM_EMAIL','no-reply@tture.com');
 /*smtp host setting */
  define('SMTP_HOST','smtp.gmail.com');
 /*set smtp port */
  define('SMTP_PORT','465');
 /*set smtp password */
- define('SMTP_PASSWORD','admin@123');
+// define('SMTP_PASSWORD','admin@123');
+ define('SMTP_PASSWORD','');
 /*set smtp username */
- define('SMTP_USERNAME','testsoft.255@gmail.com');
+// define('SMTP_USERNAME','testsoft.255@gmail.com');
+ define('SMTP_USERNAME','');
 /*Default CMS Page */
  define('DEFAULT_CMS_PAGE','home');
 /*jquery validation engine prompt position */
@@ -24,7 +26,7 @@
 /*Enable activity log. 1 for enable and 0 for disable */
  define('ACTIVITY_LOG','1');
 /*site name */
- define('SITE_NAME','CIDemo');
+ define('SITE_NAME','Tture');
 /*teestin mecasfddf */
  define('TEST_FOR_SETTING','this is testing');
 /*Default currency code for all products */

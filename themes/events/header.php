@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title><?php echo $ci->theme->get_page_title('Events'); ?></title>
         <?php echo display_meta(); ?>
         <?php
@@ -10,8 +12,8 @@
         <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet"></link>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet"></link>
         <?php
-        echo add_css(array('reset', 'bootstrap.min', 'jquery-ui.min', 'dropkick', 'font-awesome', 'nouislider.min', 'easy-responsive-tabs', 'style', 'media')); // adds few more csss
-        echo add_js(array('jquery.min', 'bootstrap.min', 'jquery-imagefill', 'imagesloaded.pkgd.min', 'jquery-ui.min', 'dropkick', 'easyResponsiveTabs', 'nouislider.min', 'jquery.validate.min', 'jquery.validationEngine', 'general', 'dev_general', 'jquery.geocomplete')); // adds js files
+        echo add_css(array('jquery-ui.min', 'dropkick', 'font-awesome', 'nouislider.min', 'easy-responsive-tabs', 'style', 'media')); // adds few more csss
+        echo add_js(array('jquery.min', 'bootstrap.min', 'imagesloaded.pkgd.min', 'jquery-imagefill', 'jquery-ui.min', 'dropkick', 'easyResponsiveTabs', 'nouislider.min', 'jquery.validate.min', 'jquery.validationEngine', 'general', 'dev_general', 'jquery.geocomplete')); // adds js files
         //echo add_js(array('jquery.validate.min'));
         ?>
         <!--[if lt IE 9]>
@@ -112,55 +114,12 @@
             </header>
             <?php
             if (!($this->_ci->router->fetch_class() == 'events' && $this->_ci->router->fetch_method() == 'search')) {
-            if ($controller != 'home_page') {
+                if ($controller != 'home_page') {
 
-                // search pannel for inner pages.
-                ?>
-                <div class="search-panel">
-                        <form class="container" id="searchResultSearchForm" method="get" action="<?php echo site_url('events/search') ?>">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <input type="text" name="search_term" class="form-control" value="<?php echo (isset($data['search_term'])) ? $data['search_term'] : ''; ?>" placeholder="Enter your destination">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                        <input type="text" id="datepicker1" name="searchStartDate" class="form-control" placeholder="Date">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                        <input type="text" id="searchStartTime" name="searchStartTime" class="form-control" placeholder="Start Time">
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                    <?php if ($this->_ci->router->fetch_class() === 'events' && $this->_ci->router->fetch_method() === 'search') { ?>
-                                        <input type="hidden"  name="filter_duration" id="filter_duration" value="<?php echo (isset($data['filter_duration'])) ? $data['filter_duration'] : ''; ?>" />
-                                        <input type="hidden" name="filter_price" id="filter_price" value="<?php echo (isset($data['filter_price'])) ? $data['filter_price'] : ''; ?>" />
-                                    <?php } ?>
-                                <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">					
-                                    <button type="submit" class="btn-secondary">Search</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <?php
-            } else {
-                ?>
-                <section class="banner">
-                    <div id="banner-slider" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner" role="listbox">
-                            <div class="item active">
-                                <?php
-                                echo add_image(array('slide01.jpg'));
-                                ?>
-                            </div>
-
-                        </div>
-                    </div>
+                    // search pannel for inner pages.
+                    ?>
                     <div class="search-panel">
-                            <form class="container" id="searchResultSearchForm" method="get" action="<?php echo site_url('events/search') ?>">
+                        <form class="container" id="searchResultSearchForm" method="get" action="<?php echo site_url('events/search') ?>">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
@@ -169,28 +128,73 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                            <input type="text" id="datepicker1" name="searchStartDate" class="form-control" placeholder="Date">
+                                        <input type="text" id="datepicker1" name="searchStartDate" class="form-control" placeholder="Date">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                            <input type="text" id="searchStartTime" name="searchStartTime" class="form-control" placeholder="Start Time">
+                                        <input type="text" id="searchStartTime" name="searchStartTime" class="form-control" placeholder="Start Time">
                                     </div>
                                 </div>
-
                                 <div class="col-sm-2">
-                                        <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>" />
+                                    <?php if ($this->_ci->router->fetch_class() === 'events' && $this->_ci->router->fetch_method() === 'search') { ?>
+                                        <input type="hidden"  name="filter_duration" id="filter_duration" value="<?php echo (isset($data['filter_duration'])) ? $data['filter_duration'] : ''; ?>" />
+                                        <input type="hidden" name="filter_price" id="filter_price" value="<?php echo (isset($data['filter_price'])) ? $data['filter_price'] : ''; ?>" />
+                                    <?php } ?>
+                                    <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>">					
                                         <button type="submit" class="btn-secondary">Search</button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                </section>
-                <?php
-            }
+                    <?php
+                } else {
+                    ?>
+                    <section class="banner">
+                        <div id="banner-slider" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item active">
+                                    <?php
+                                    echo add_image(array('slide01.jpg'));
+                                    ?>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="search-panel">
+                            <form class="container" id="searchResultSearchForm" method="get" action="<?php echo site_url('events/search') ?>">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input type="text" name="search_term" class="form-control" value="<?php echo (isset($data['search_term'])) ? $data['search_term'] : ''; ?>" placeholder="Enter your destination">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <input type="text" id="datepicker1" name="searchStartDate" class="form-control" placeholder="Date">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <input type="text" id="searchStartTime" name="searchStartTime" class="form-control" placeholder="Start Time">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="<?php echo $this->_ci->security->get_csrf_token_name(); ?>" value="<?php echo $this->_ci->security->get_csrf_hash(); ?>" />
+                                        <button type="submit" class="btn-secondary">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <?php
+                }
             }
             ?>
             <div class="message_div">
-                <?php echo $this->message(); ?>
+                <div class='container' style="text-align: center">
+                    <?php echo $this->message(); ?>
+                </div>
             </div>
 

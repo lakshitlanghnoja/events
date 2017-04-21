@@ -73,6 +73,23 @@ class Users_model extends Base_Model {
         if (isset($data['activation_code'])) {
             $user_data ['activation_code'] = $data['activation_code'];
         }
+        if (isset($data['email_varified'])) {
+            $user_data ['email_varified'] = $data['email_varified'];
+        }
+        if (isset($data['profile_image_varified'])) {
+            $user_data ['profile_image_varified'] = $data['profile_image_varified'];
+        }
+        if (isset($data['government_id_varified'])) {
+            $user_data ['government_id_varified'] = $data['government_id_varified'];
+        }
+        if (isset($data['phone_varified'])) {
+            $user_data ['phone_varified'] = $data['phone_varified'];
+        }
+        if (isset($data['social_media_varified'])) {
+            $user_data ['social_media_varified'] = $data['social_media_varified'];
+        }
+        
+        
 
         if (isset($user_data['id']) && $user_data['id'] != 0 && $user_data['id'] != "") {
             $this->db->where('id', $user_data['id']);
@@ -93,6 +110,7 @@ class Users_model extends Base_Model {
         $profileImageData = array();
         if (isset($data['profile_image'])) {
             $profileImageData['profile_image'] = $data['profile_image'];
+            $profileImageData ['profile_image_varified'] = 0;
         }
         
         if (isset($user_id) && $user_id != 0 && $user_id != "") {
@@ -143,16 +161,20 @@ class Users_model extends Base_Model {
             $user_data['lastname'] = $data['lastname'];
         }
         if (isset($data['email'])) {
-            $user_data ['email'] = $data['email'];
+            $user_data ['email'] = $data['email'];            
         }
         if (isset($data['date_of_birth'])) {
             $user_data ['date_of_birth'] = date('Y-m-d h:i:s', strtotime($data['date_of_birth']));
         }
         if (isset($data['mobile_number'])) {
-            $user_data ['mobile_number'] = $data['mobile_number'];
+            $user_data ['mobile_number'] = $data['mobile_number'];            
         }
         if (isset($data['social_media_link'])) {
             $user_data ['social_media_link'] = $data['social_media_link'];
+        }
+        if (isset($data['government_id_proof'])) {
+            $user_data ['government_id_proof'] = $data['government_id_proof'];
+            $user_data ['government_id_varified'] = 0;
         }
         if (isset($data['about_me'])) {
             $user_data ['about_me'] = $data['about_me'];

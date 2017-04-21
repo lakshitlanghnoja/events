@@ -53,7 +53,7 @@
         </noscript>
         <div id="wrapper">
             <div class="header clearfix">
-                <h1 class="logo"><a href="<?php echo site_url().$ci->theme->get('section_name'); ?>/users" title="Logo"><?php echo add_image(array('logo.jpg')); ?></a></h1>
+                <h1 class="logo"><a href="<?php echo site_url().$ci->theme->get('section_name'); ?>/users" title="Logo"><?php echo add_image(array('logo.png')); ?></a></h1>
                 <div class="welcome">
                     <a class="logout" href="<?php echo site_url().$ci->theme->get('section_name'); ?>/users/logout" title="Logout"><?php echo add_image(array('logout.png')); ?></a><p class="welcome-text">Welcome, <span><?php echo $ci->session->userdata[$ci->theme->get('section_name')]['firstname']; ?></span>&nbsp;|&nbsp;<a class="logout" href="<?php echo site_url().$ci->theme->get('section_name'); ?>/users/changepassword" title="Change Password">Change Password</a></p> <?php echo add_image(array('user_icon.png')); ?></div>
             </div>

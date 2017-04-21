@@ -7,6 +7,7 @@ $login = ((isset($ci->session->userdata['front']['logged_in'])) && $ci->session-
     .taxDescriptionTable{width: 100%;}
     .taxDescriptionTable .valueCell{text-align: left; padding-left: 15px; width: 11%;}
 </style>
+
 <section class="main-content">
     <div class="container">
         <div class="row">
@@ -46,12 +47,22 @@ $login = ((isset($ci->session->userdata['front']['logged_in'])) && $ci->session-
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#about-the-event" data-toggle="tab">About the event</a></li>
                         <li role="presentation"><a href="#about-the-host" data-toggle="tab">About the host</a></li>
+                        <?php
+                        if (isset($data['about_safety']) && $data['about_safety'] != '') {
+                            ?>
+                            <li role="presentation"><a href="#about-the-safety" data-toggle="tab">About the safety</a></li>
+                            <?php
+                        }
+                        if (isset($data['special_requirement']) && $data['special_requirement'] != '') {
+                            ?>
+                            <li role="presentation"><a href="#sepcial-requirement" data-toggle="tab">Special Requirement</a></li>
+                            <?php
+                        }
+                        ?>
                     </ul>
 
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="about-the-event">
-                            <!--<h3>About the <?php echo $data['title']; ?></h3>-->
-                            <!--<p><?php echo $data['about_event']; ?></p>-->
+                        <div role="tabpanel" class="tab-pane active" id="about-the-event">                            
                             <div class="row">
                                 <div class="col-md-3 col-sm-4">            
                                     <?php
@@ -122,6 +133,24 @@ $login = ((isset($ci->session->userdata['front']['logged_in'])) && $ci->session-
                             <h3>About the host</h3>
                             <p><?php echo $data['about_me']; ?></p>
                         </div>
+                        <?php
+                        if (isset($data['about_safety']) && $data['about_safety'] != '') {
+                            ?>
+                            <div role="tabpanel" class="tab-pane" id="about-the-safety">
+                                <h3>About the safety</h3>
+                                <p><?php echo $data['about_safety']; ?></p>
+                            </div>
+                            <?php
+                        }
+                        if (isset($data['special_requirement']) && $data['special_requirement'] != '') {
+                            ?>
+                            <div role="tabpanel" class="tab-pane" id="sepcial-requirement">
+                                <h3>Special Requirements</h3>
+                                <p><?php echo $data['special_requirement']; ?></p>
+                            </div>
+                            <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -200,7 +229,7 @@ $login = ((isset($ci->session->userdata['front']['logged_in'])) && $ci->session-
                     </div>
                     <input type="hidden" id="eventAmount" name="eventAmount" value="<?php echo $data['price']; ?>">
                     <input type="hidden" id="tax" name="tax" value="<?php echo $tax; ?>">
-                    <!--<input type="hidden" id="totalAmount" name="amount" value="<?php //echo $totalAmount;  ?>">-->
+                    <!--<input type="hidden" id="totalAmount" name="amount" value="<?php //echo $totalAmount;     ?>">-->
 
 
                     <?php
@@ -227,7 +256,7 @@ $login = ((isset($ci->session->userdata['front']['logged_in'])) && $ci->session-
     <input type="hidden" name="currency_code" value="USD">
     <input type="hidden" name="item_name" value="<?php echo $data['title']; ?>">
     <input type="hidden" id="totalAmount" name="amount" value="<?php echo $totalAmount; ?>">  
-    <input type="hidden" id="event_id" name="event_id" value="<?php echo $data['id'];?>">
+    <input type="hidden" id="event_id" name="event_id" value="<?php echo $data['id']; ?>">
     <input type="hidden" id="total_sheet_booked" name="total_sheet" value="">
 </form>
 
@@ -264,9 +293,9 @@ $login = ((isset($ci->session->userdata['front']['logged_in'])) && $ci->session-
                 $('#join_message').html('<label class="error">Please login to site to join an event.</label>');
             } else {
                 $('#join_message').html('<label class="success">Please wait. Page will redirect to payment site.</label>');
-                
+
                 $('#total_sheet_booked').val($('#totalSheets').val());
-                
+
                 $('#event_join_form').submit();
             }
         });

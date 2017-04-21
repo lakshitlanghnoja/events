@@ -16,28 +16,28 @@ class Mailer extends PHPMailer
  
         $this->mail->CharSet = "utf-8";                  // ????? CharSet ????????
         $this->mail->SMTPDebug  = 0;                     // enables SMTP debug information
-        $this->mail->SMTPAuth   = true;                  // enable SMTP authentication
-        $this->mail->SMTPSecure = "ssl";                 // sets the prefix to the servier
-        $this->mail->Host       = "smtp.gmail.com";      // sets GMAIL as the SMTP server
-        $this->mail->Port       = 465;                   // set the SMTP port for the GMAIL server
+        $this->mail->SMTPAuth   = false;                  // enable SMTP authentication
+        $this->mail->SMTPSecure = false;                 // sets the prefix to the servier
+        $this->mail->Host       = "localhost";      // sets GMAIL as the SMTP server
+        $this->mail->Port       = 25;                   // set the SMTP port for the GMAIL server
         $this->mail->Username   = SMTP_USERNAME;// GMAIL username
         $this->mail->Password   = SMTP_PASSWORD;       // GMAIL password
-        $this->mail->AddReplyTo('YOUR_GAMIL@gmail.com', 'YOUR_NAME');
-        $this->mail->SetFrom('YOUR_GAMIL@gmail.com', 'YOUR_NAME');
+        $this->mail->AddReplyTo('no-reply@tture.com', 'Tture');
+        $this->mail->SetFrom('no-reply@tture.com', 'Tture');
     }
 
     public function sendmail($to, $to_name, $subject, $body){
 
         try{
             $this->mail->AddAddress($to, $to_name);
-            $this->mail->AddBCC('testsoft.54@gmail.com','CIDEMO Mails');
+            //$this->mail->AddBCC('testsoft.54@gmail.com','CIDEMO Mails');
 
             $this->mail->Subject = $subject;
             $this->mail->Body    = $body;
 
             $this->mail->Send();
 
-            echo "Message Sent OK</p>\n";
+           // echo "Message Sent OK</p>\n";
  
         } catch (phpmailerException $e) {
             echo $e->errorMessage(); //Pretty error messages from PHPMailer

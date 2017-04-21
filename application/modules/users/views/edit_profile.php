@@ -71,7 +71,7 @@ echo form_open_multipart('users/profile', $attributes);
         $mobileNumber = array(
             'name' => 'mobile_number',
             'id' => 'mobile_number',
-            'value' => set_value('mobile_number', ((isset($profileData['mobile_number'])) ? ($profileData['mobile_number']) : '')),            
+            'value' => set_value('mobile_number', ((isset($profileData['mobile_number'])) ? ($profileData['mobile_number']) : '')),
             'placeholder' => 'Mobile Number',
             'class' => "form-control border-input "
         );
@@ -94,13 +94,26 @@ echo form_open_multipart('users/profile', $attributes);
 </div>
 
 <div class="row">
+    <?php
+    if (isset($profileData['government_id_proof']) && $profileData['government_id_proof'] != '') {
+        ?>
+        <div class="form-group col-sm-6">
+            <?php
+            $profileImageURL = $ci->config->item('userImageURL');
+            $proofURL = $profileImageURL.$profileData['government_id_proof'];
+            ?>
+            <img src="<?php echo $proofURL;?>" style="max-width: 150px;">
+        </div>
+        <?php
+    }
+    ?>
     <div class="form-group col-sm-6">
         Please upload Govt. Proof ID.
         <?php
         $socialMediaLink = array(
             'name' => 'government_id_proof',
             'id' => 'government_id_proof',
-            'class' => "form-control border-input "
+            'class' => "form-control border-input"
         );
         ?>
         <?php echo form_upload($socialMediaLink); ?> 
@@ -122,8 +135,25 @@ echo form_open_multipart('users/profile', $attributes);
     </div>
 </div>
 
-<input type="hidden" name="id" value="<?php  echo ((isset($profileData['id'])) ? ($profileData['id']) : '0');?>">
-<input type="hidden" name="role_id" value="<?php  echo ((isset($profileData['role_id'])) ? ($profileData['role_id']) : '0');?>">
+<div class="row">
+    <div class="form-group col-sm-12">
+
+        <?php
+        $paypalAccount_data = array(
+            'name' => 'paypalAccountId',
+            'id' => 'paypalAccountId',
+            'value' => set_value('paypalAccountId', ((isset($user_account['paypal_account_id'])) ? $user_account['paypal_account_id'] : '')),
+            'placeholder' => 'Paypal Account Id',
+            'class' => "form-control border-input"
+        );
+        ?>
+        <input type="hidden" name="account_id" value="<?php echo ((isset($user_account['id'])) ? ($user_account['id']) : '0'); ?>">
+        <?php echo form_input($paypalAccount_data); ?>        
+    </div>    
+</div>
+
+<input type="hidden" name="id" value="<?php echo ((isset($profileData['id'])) ? ($profileData['id']) : '0'); ?>">
+<input type="hidden" name="role_id" value="<?php echo ((isset($profileData['role_id'])) ? ($profileData['role_id']) : '0'); ?>">
 <input type="hidden" name="formAction" value="edit_profile">
 <button class="btn-secondary btn-small updateProfileForm">Update</button>
 <?php

@@ -341,7 +341,7 @@ class Users extends Base_Front_Controller {
     public function profile() {
         $CI = & get_instance();
         $id = $this->session->userdata[$this->section_name]['user_id'];
-        
+
         if ($this->input->post('action') == 'editProfileImage') {
             if (!empty($_FILES['user_profile']['name'])) {
                 $user_id = $this->session->userdata[$this->section_name]['user_id'];
@@ -369,12 +369,12 @@ class Users extends Base_Front_Controller {
                     $fileData = $this->upload->data();
                     $profileImageData['profile_image'] = $fileData['file_name'];
 
-                    $this->users_model->updateProfileImage($profileImageData, $user_id);                    
-                    $this->session->set_custom_userdata($this->section_name, array('profileImage' => $fileData['file_name']));   
+                    $this->users_model->updateProfileImage($profileImageData, $user_id);
+                    $this->session->set_custom_userdata($this->section_name, array('profileImage' => $fileData['file_name']));
                 }
             }
         }
-        
+
         if (!empty($id)) {
             $result = $this->users_model->get_user_detail($id);
             if (!empty($result) && $result['status'] == 1) {
@@ -429,6 +429,9 @@ class Users extends Base_Front_Controller {
                     $social_media_link = $post['social_media_link'];
                     $about_me = $post['about_me'];
 
+                    $paypalAccountId = $post['paypalAccountId'];
+
+
                     $status = 1;
 
 
@@ -443,11 +446,46 @@ class Users extends Base_Front_Controller {
                     $data_array['social_media_link'] = $social_media_link;
                     $data_array['about_me'] = $about_me;
 
+                    if (!empty($_FILES['government_id_proof']['name'])) {                        
+                        $fileName = '';
+                        $fileNameArray = explode('.', $_FILES['government_id_proof']['name']);
+                        $fileNameExt = end($fileNameArray);
+                        array_pop($fileNameArray);
+                        $fileName = implode('.', $fileNameArray) . '_govt_proof_' . $id . '.' . $fileNameExt;
+
+                        $_FILES['government_id_proof']['name'] = $fileName;
+                        $_FILES['government_id_proof']['type'] = $_FILES['government_id_proof']['type'];
+                        $_FILES['government_id_proof']['tmp_name'] = $_FILES['government_id_proof']['tmp_name'];
+                        $_FILES['government_id_proof']['error'] = $_FILES['government_id_proof']['error'];
+                        $_FILES['government_id_proof']['size'] = $_FILES['government_id_proof']['size'];
+
+                        $uploadPath = $CI->config->item('userImagePath');
+
+                        $config['upload_path'] = $uploadPath;
+                        $config['allowed_types'] = 'jpg|png';
+
+                        $this->load->library('upload', $config);
+                        $this->upload->initialize($config);
+                        if ($this->upload->do_upload('government_id_proof')) {
+                            $fileData = $this->upload->data();
+                            $data_array['government_id_proof'] = $fileData['file_name'];
+                        }
+                    }
+
                     //pre($data_array);
                     // field name, error message, validation rules
                     //$this->profile_validation_rules();
 
                     $this->users_model->save_profile($data_array);
+
+                    if ($paypalAccountId) {
+                        $accountId = $post['account_id'];
+                        $data_account_array['id'] = $accountId;
+                        $data_account_array['user_id'] = $id;
+                        $data_account_array['paypal_account_id'] = $paypalAccountId;
+                        $this->users_model->save_accountDetails($data_account_array);
+                    }
+
                     $this->theme->set_message(lang('edit-profile-success'), 'success');
                     redirect(base_url() . "users/profile");
                 }
@@ -542,11 +580,11 @@ class Users extends Base_Front_Controller {
         return $redeemAmount;
     }
 
-    public function removeProfileImage($user_id){
-        if(isset($user_id) && $user_id != ''){
+    public function removeProfileImage($user_id) {
+        if (isset($user_id) && $user_id != '') {
             $data['profile_image'] = '';
             $this->users_model->updateProfileImage($data, $user_id);
-            $this->session->set_custom_userdata($this->section_name, array('profileImage' => '')); 
+            $this->session->set_custom_userdata($this->section_name, array('profileImage' => ''));
         }
         redirect('users/profile');
     }
@@ -558,7 +596,7 @@ class Users extends Base_Front_Controller {
     public function send_email($data = array(), $template = NULL) {
 
         $this->load->library('mailer');
-        $this->mailer->mail->SetFrom("noreply@events.com", SITE_NAME);
+        $this->mailer->mail->SetFrom("noreply@tture.com", SITE_NAME);
         $this->mailer->mail->IsHTML(true);
 
         $firstname = isset($data['firstname']) ? $data['firstname'] : '';

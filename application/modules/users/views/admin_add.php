@@ -1,16 +1,16 @@
 <script type="text/javascript">
     (function ($) {
 
-        $.fn.maxlength = function(){
+        $.fn.maxlength = function () {
 
-            $("textarea[maxlength]").keypress(function(event){
+            $("textarea[maxlength]").keypress(function (event) {
                 var key = event.which;
 
                 //all keys including return.
-                if(key >= 33 || key == 13 || key == 32) {
+                if (key >= 33 || key == 13 || key == 32) {
                     var maxLength = $(this).attr("maxlength");
                     var length = this.value.length;
-                    if(length >= maxLength) {
+                    if (length >= maxLength) {
                         event.preventDefault();
                     }
                 }
@@ -19,19 +19,23 @@
 
     })(jQuery);
 
-    $(document).ready(function($) {
+    $(document).ready(function ($) {
         //Set maxlength of all the textarea (call plugin)
         $().maxlength();
     })
 
 
 </script>
+<style>
+    .pfofile_image{max-height: 150px; max-width: 150px;}
+    .pfofile_image img{max-height: 150px; max-width: 150px;}
+</style>
 
 <div class="main-container">
-    <?php echo form_open_multipart($this->_data['section_name'] . '/users/save', array('id' => 'saveform', 'name' => 'saveform')); ?>
+            <?php echo form_open_multipart($this->_data['section_name'] . '/users/save', array('id' => 'saveform', 'name' => 'saveform')); ?>
     <div class="grid-data">
         <div class="add-new">
-            <?php echo anchor(site_url() . $this->_data['section_name'] . '/users', lang('view-all-user'), 'title="View All Users" style="text-align:center;width:100%;"'); ?>
+<?php echo anchor(site_url() . $this->_data['section_name'] . '/users', lang('view-all-user'), 'title="View All Users" style="text-align:center;width:100%;"'); ?>
         </div>
         <table cellspacing="1" cellpadding="4" border="0" bgcolor="#e6ecf2" width="100%">
             <tbody bgcolor="#fff">
@@ -124,6 +128,111 @@
                                             <td><?php echo form_password($passconf_data); ?><span class="validation_error"><?php echo form_error('passconf'); ?></span></td>
                                             </td>
                                         </tr>
+                                        
+                                        <tr>
+                                           <td align="right">Email Varified?</td>
+                                            <td>
+                                                <?php
+                                                $Varifylist = array('0' => 'Unconfirmed', '1' => 'Varified');
+                                                echo form_dropdown('email_varified', $Varifylist, $email_varified,'');
+                                                ?>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td align="right">Profile Image</td>
+                                            <td>
+                                                <div class="pfofile_image">
+                                                    <?php
+                                                    if (isset($profile_image) && $profile_image != '') {
+                                                        $profileImageURL = $this->_ci->config->item('userImageURL') . $profile_image;
+                                                        ?>
+                                                        <img src="<?php echo $profileImageURL; ?>">
+                                                        <?php
+                                                    } else {
+                                                        echo add_image('dummy.jpg');
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                            
+                                        <tr>
+                                           <td align="right">Profile Image Varified?</td>
+                                            <td>
+                                                <?php
+                                                $Varifylist = array('0' => 'Unconfirmed', '1' => 'Varified');
+                                                echo form_dropdown('profile_image_varified', $Varifylist, $profile_image_varified,'');
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td align="right">Govt. Proof</td>
+                                            <td>
+                                                <div class="pfofile_image">
+                                                    <?php
+                                                    if (isset($government_id_proof) && $government_id_proof != '') {
+                                                        $government_id_proofURL = $this->_ci->config->item('userImageURL') . $government_id_proof;
+                                                        ?>
+                                                        <img src="<?php echo $government_id_proofURL; ?>">
+                                                        <?php
+                                                    } else {
+                                                        
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                           <td align="right">Govt. Proof Varified?</td>
+                                            <td>
+                                                <?php
+                                                $Varifylist = array('0' => 'Unconfirmed', '1' => 'Varified');
+                                                echo form_dropdown('government_id_varified', $Varifylist, $government_id_varified,'');
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td align="right">Social Media Link</td>
+                                            <td>
+                                                <?php
+                                                echo $social_media_link;
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                           <td align="right">Social Media Link Varified?</td>
+                                            <td>
+                                                <?php
+                                                $Varifylist = array('0' => 'Unconfirmed', '1' => 'Varified');
+                                                echo form_dropdown('social_media_varified', $Varifylist, $social_media_varified,'');
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td align="right">Phone Number</td>
+                                            <td>
+                                                <?php
+                                                echo $mobile_number;
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                           <td align="right">Phone Varified?</td>
+                                            <td>
+                                                <?php
+                                                $Varifylist = array('0' => 'Unconfirmed', '1' => 'Varified');
+                                                echo form_dropdown('phone_varified', $Varifylist, $phone_varified,'');
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        
                                         <tr>
                                             <td align="right"><?php echo form_label(lang('role'), 'Role'); ?>:</td>
                                             <td>
@@ -161,7 +270,7 @@
                                                 <span class="validation_error"><?php echo form_error('status'); ?></span>
                                             </td>
                                         </tr>
-                                        <?php //}  ?>
+<?php //}   ?>
                                     </table>
                                 </td>
                             </tr>
@@ -198,15 +307,17 @@
     ?>
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        $(":input").each(function (i) { $(this).attr('tabindex', i + 1); })
+        $(":input").each(function (i) {
+            $(this).attr('tabindex', i + 1);
+        })
         jQuery("#saveform").validationEngine(
-        {
-            //promptPosition: '<?php echo VALIDATION_ERROR_POSITION; ?>',
-            validationEventTrigger: "submit"
-        }
-    );
+                {
+                    //promptPosition: '<?php echo VALIDATION_ERROR_POSITION; ?>',
+                    validationEventTrigger: "submit"
+                }
+        );
 
         $("input:text:visible:first").focus().val($('input:text:visible:first').val());
         //  $('input').focus().val($('input').val());
@@ -217,13 +328,14 @@
     });
     function addClassforemail()
     {
-        var email_text=$('#password').val();
-        if(email_text!="")
+        var email_text = $('#password').val();
+        if (email_text != "")
         {
             // $('#email').removeClass();
             $('#passconf').addClass("validate[required]");
-        }else
-        {  $('#passconf').removeClass();
+        } else
+        {
+            $('#passconf').removeClass();
             // $('#email').addClass("input validate[required]");
         }
 

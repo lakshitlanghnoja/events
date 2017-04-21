@@ -5,7 +5,7 @@
 <div class="login-form-box midway-vertical midway-horizontal">
     <div class="login-header">
 <!--<a href="javascript:void(0)" title="Logo"><?php // echo add_image(array('logo.jpg')); ?></a>-->
-        <?php echo add_image(array('logo.jpg')); ?>
+        <?php echo add_image(array('logo.png')); ?>
     </div>
     <div class="login-form-content">
         <h2><?php echo lang('admin-login'); ?></h2>
